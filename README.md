@@ -1,1 +1,2 @@
-# goit-node-pets
+# goit-node-hw
+Node JS home work
