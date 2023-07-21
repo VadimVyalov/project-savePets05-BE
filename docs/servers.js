@@ -7,7 +7,7 @@ module.exports = {
       description: "Local server",
     },
     {
-      url: "https://contacts-4pp6.onrender.com",
+      url: "https://project-savepets05-be.onrender.com",
       description: "Render.com server",
     },
   ],
