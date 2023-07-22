@@ -6,7 +6,7 @@ const {
   favoriteSchema,
   registerSchema,
   loginSchema,
-  subscriptionSchema,
+  infoSchema,
   verifySchema,
 } = require("./validatorSchems");
 const { sendEmail } = require("./sendMail");
@@ -15,12 +15,11 @@ module.exports = {
   appError,
   mongooseError,
   catchAsync,
-
   contactSchema,
   favoriteSchema,
   registerSchema,
   loginSchema,
-  subscriptionSchema,
+  infoSchema,
   verifySchema,
   sendEmail,
 };

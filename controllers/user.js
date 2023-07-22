@@ -41,19 +41,16 @@ class UserController {
   current = async (req, res) => {
     const { id } = req.user;
     const user = await userService.current(id);
-
+    // console.log(user);
     res.status(200).json(user);
   };
 
-  updateSubscription = async (req, res) => {
+  updateInfo = async (req, res) => {
     const { id } = req.user;
-    const { subscription } = req.body;
 
-    await userService.updateSubscription(id, subscription);
+    await userService.updateInfo(id, req.body);
 
-    res
-      .status(200)
-      .json({ message: `Subscription updated to '${subscription}'` });
+    res.status(200).json({ message: `User info succesfull updated ` });
   };
 
   updateAvatar = async (req, res) => {

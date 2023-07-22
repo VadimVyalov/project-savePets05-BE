@@ -5,7 +5,7 @@ const {
   auth,
   validateLoginBody,
   validateRegisterBody,
-  validateSubscription,
+  validateUpdateInfo,
   validateVerify,
   uploadUserAvatar,
   authAccess,
@@ -14,18 +14,18 @@ const {
 
 const router = Router();
 
-//router.post("/register", validateRegisterBody, userController.registration);
-router.post("/register", userController.registration);
-//router.post("/login", validateLoginBody, userController.login);
-router.post("/login", userController.login);
+router.post("/register", validateRegisterBody, userController.registration);
+router.post("/login", validateLoginBody, userController.login);
 router.post("/refresh", authRefresh, userController.refresh);
+
 router.post("/verify", validateVerify, userController.sendVerify);
 router.get("/verify/:verificationToken", userController.verifyEmail);
 
 router.use("/", authAccess);
 router.get("/current", userController.current);
-router.patch("/avatars", uploadUserAvatar, userController.updateAvatar);
-router.patch("/", validateSubscription, userController.updateSubscription);
 router.post("/logout", userController.logout);
+
+router.patch("/info", validateUpdateInfo, userController.updateInfo);
+router.patch("/avatars", uploadUserAvatar, userController.updateAvatar);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const User = require("../models/userSchema");
 const { appError } = require("../utils");
 const ImageService = require("./ImageService");
-//const moment = require("moment");
+const moment = require("moment");
 class UserServuces {
   registration = async (body) => {
     const user = await User.findOne({ email: body.email });
@@ -76,23 +76,25 @@ class UserServuces {
   };
 
   current = async (id) => {
-    const result = await User.findById(id).select([
-      "email",
-      "subscription",
+    let result = await User.findById(id).select([
       "-_id",
+      "-token",
+      "-password",
     ]);
+
+    result = result.toObject();
+    result.birthday = moment(result.birthday).format("DD-MM-YYYY");
 
     return result;
   };
 
-  updateSubscription = async (id, subscription) => {
-    const user = await User.findByIdAndUpdate(
-      id,
-      { subscription },
-      { new: true }
-    );
-    if (!user) throw appError(401, "Update subscription wrong");
-    return user.subscription;
+  updateInfo = async (id, info) => {
+    info.birthday = info.birthday.split("-").reverse().join("-");
+    // console.log(moment(info.birthday).add(13, "M").format("DD-MM-YYYY"));
+    const user = await User.findByIdAndUpdate(id, info, { new: true });
+    if (!user) throw appError(401, "Update user info wrong");
+
+    return user;
   };
 
   updateAvatar = async (id, file) => {
