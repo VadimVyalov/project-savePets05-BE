@@ -25,7 +25,7 @@ class ImageService {
   static async save(file, options, ...pathSegments) {
     const fileName = `${v4()}.jpeg`;
     const fullFilePath = path.join(process.cwd(), "public", ...pathSegments);
-
+    console.log(file);
     await fse.ensureDir(fullFilePath);
     await sharp(file.buffer)
       .resize(options || { height: 500, width: 500 })

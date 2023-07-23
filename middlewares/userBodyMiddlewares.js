@@ -7,6 +7,7 @@ const {
   verifySchema,
 } = require("../utils");
 const ImageService = require("../services/ImageService");
+const CloudinaryService = require("../services/cloudinaryServices");
 
 const validateRegisterBody = catchAsync(async (req, _, next) => {
   const bodyNoKey = [];
@@ -80,7 +81,7 @@ const validateVerify = catchAsync(async (req, _, next) => {
   next();
 });
 
-const uploadUserAvatar = ImageService.upload("avatar");
+const uploadUserAvatar = CloudinaryService.upload("avatar");
 
 module.exports = {
   validateRegisterBody,

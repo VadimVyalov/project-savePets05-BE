@@ -1,6 +1,7 @@
 const User = require("../models/userSchema");
 const { appError } = require("../utils");
 const ImageService = require("./ImageService");
+const CloudinaryService = require("./cloudinaryServices");
 const moment = require("moment");
 class UserServuces {
   registration = async (body) => {
@@ -100,11 +101,7 @@ class UserServuces {
   updateAvatar = async (id, file) => {
     if (!file) throw appError(401, "File is require!");
 
-    const avatarURL = await ImageService.save(
-      file,
-      { width: 250, height: 250 },
-      "avatars"
-    );
+    const avatarURL = await CloudinaryService.save(file, {}, "avatars");
 
     const user = await User.findByIdAndUpdate(id, { avatarURL }, { new: true });
     if (!user) throw appError(401, "Update avatar wrong");

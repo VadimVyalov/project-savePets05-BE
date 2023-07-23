@@ -53,7 +53,7 @@ class UserController {
     res.status(200).json({ message: `User info succesfull updated ` });
   };
 
-  updateAvatar = async (req, res) => {
+  updateAvatar = catchAsync(async (req, res) => {
     const { id } = req.user;
     const { file } = req;
 
@@ -62,7 +62,7 @@ class UserController {
     res.status(200).json({
       avatarURL,
     });
-  };
+  });
 
   sendVerify = catchAsync(async (req, res) => {
     const { email } = req.body;
