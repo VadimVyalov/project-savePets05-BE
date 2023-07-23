@@ -88,6 +88,7 @@ user.pre("save", async function (next) {
     });
     this.avatarURL = avatarURL;
     this.verificationToken = v4();
+
     // console.log(this.birthday);
   }
 

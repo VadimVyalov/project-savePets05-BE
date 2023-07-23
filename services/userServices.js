@@ -5,14 +5,37 @@ const CloudinaryService = require("./cloudinaryServices");
 const moment = require("moment");
 class UserServuces {
   registration = async (body) => {
-    const user = await User.findOne({ email: body.email });
-    if (user) throw appError(409, "Email in use...");
+    const { TOKEN } = require("../config/config");
+    const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } = process.env;
 
-    const result = await User.create({ ...body, verificationToken: "qwe" });
+    const token = {};
 
-    const { email, name } = result;
+    const checkUser = await User.findOne({ email: body.email });
+    if (checkUser) throw appError(409, "Email in use...");
 
-    return { user: { email, name } };
+    const user = await User.create({ ...body, verificationToken: "qwe" });
+
+    token.access = await user.getToken(JWT_ACCESS_SECRET, TOKEN.access);
+    if (!token.access) throw appError(401, "Refresh denied");
+
+    token.refresh = await user.getToken(JWT_REFRESH_SECRET, TOKEN.refresh);
+    if (!token.refresh) throw appError(401, "Refresh denied");
+
+    const { name, email, id } = user;
+    //console.log(token);
+    await User.findByIdAndUpdate(id, {
+      token,
+    });
+
+    const result = {
+      token,
+      user: {
+        email,
+        name,
+      },
+    };
+    return result;
+    // return { user: { email, name } };
   };
 
   login = async (body) => {
@@ -24,7 +47,7 @@ class UserServuces {
     const user = await User.findOne({ email });
     if (!user) throw appError(401, "Email or password is wrong");
 
-    const { subscription, id, verify } = user;
+    const { name, id, verify } = user;
     // if (!verify) throw appError(401, "User not verify");
 
     const isValidPassword = await user.validPassword(password);
@@ -44,7 +67,7 @@ class UserServuces {
       token,
       user: {
         email,
-        subscription,
+        name,
       },
     };
     return result;
