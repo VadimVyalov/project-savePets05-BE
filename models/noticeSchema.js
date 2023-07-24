@@ -21,7 +21,7 @@ const notice = new Schema(
       type: String,
       default: null,
     },
-    breed: {
+    type: {
       type: String,
       default: null,
     },
@@ -38,12 +38,12 @@ const notice = new Schema(
       type: String,
       default: null,
     },
+
     price: {
       type: Number,
       min: 1,
-      required: function () {
-        return category === "sell";
-      },
+      required: (category) => category === "sell",
+      default: null,
     },
     comments: {
       type: String,

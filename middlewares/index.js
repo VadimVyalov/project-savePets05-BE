@@ -1,8 +1,9 @@
 const { checkById } = require("./contactsMiddlewares");
 const {
-  validateContactBody,
+  validateNoticeBody,
   validateFavorite,
-} = require("./contactBodyMiddlewares");
+  uploadNotice,
+} = require("./noticeBodyMiddlewares");
 const {
   validateRegisterBody,
   validateLoginBody,
@@ -15,7 +16,7 @@ const { authAccess, authRefresh } = require("./authAlt");
 
 module.exports = {
   checkById,
-  validateContactBody,
+  validateNoticeBody,
   validateFavorite,
   auth,
   validateRegisterBody,
@@ -25,6 +26,6 @@ module.exports = {
   uploadUserAvatar,
   authAccess,
   authRefresh,
-
+  uploadNotice,
   //ImageService,
 };

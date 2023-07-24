@@ -17,8 +17,11 @@ class CloudinaryService {
     const multerStorage = multer.memoryStorage();
 
     const multerFilter = (req, file, callBackFunc) => {
+      if (!file)
+        callBackFunc(appError(400, "Please upload image file..."), false);
       const fileSize =
         parseInt(req.headers["content-length"]) < 3 * 1024 * 1024;
+
       const fileType = file.mimetype.startsWith("image");
       if (!fileType)
         callBackFunc(appError(400, "Please upload images only..."), false);

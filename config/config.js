@@ -28,4 +28,13 @@ const REGEXP = {
   },
 };
 
-module.exports = { TOKEN, REGEXP };
+NOTISE_BODY = [
+  "title",
+  "category",
+  "name",
+  "birthday",
+  "type",
+  "sex",
+  "location",
+];
+module.exports = { TOKEN, REGEXP, NOTISE_BODY };

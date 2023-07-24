@@ -8,7 +8,7 @@ const {
   loginSchema,
   infoSchema,
   verifySchema,
-} = require("./validatorSchems");
+} = require("../validationShems/userValidationSchema");
 const { sendEmail } = require("./sendMail");
 
 module.exports = {

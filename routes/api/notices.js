@@ -1,32 +1,35 @@
 const { Router } = require("express");
 const { noticesController } = require("../../controllers");
+const multer = require("multer");
 
 const {
   checkById,
-  validateContactBody,
+  validateNoticeBody,
   validateFavorite,
-  auth,
+  authAccess,
+  uploadNotice,
 } = require("../../middlewares");
 
 const router = Router();
 
-router.use("/", auth);
+router.use("/", authAccess);
 
-router
-  .route("/")
-  .post(validateContactBody, noticesController.addContact)
-  .get(noticesController.listContacts);
+//router.post("/", uploadNotice, validateNoticeBody);
 
-router.use("/:id", checkById);
+router.route("/").post(uploadNotice, validateNoticeBody, noticesController.add);
+//   .post(validateNoticeBody, noticesController.addContact)
+//   .get(noticesController.listContacts);
 
-router
-  .route("/:id")
-  .get(noticesController.getById)
-  .delete(noticesController.removeContact)
-  .put(validateContactBody, noticesController.updateContact);
+// router.use("/:id", checkById);
 
-router
-  .route("/:id/favorite")
-  .patch(validateFavorite, noticesController.updateStatusContact);
+// router
+//   .route("/:id")
+//   .get(noticesController.getById)
+//   .delete(noticesController.removeContact)
+//   .put(validateNoticeBody, noticesController.updateContact);
+
+// router
+//   .route("/:id/favorite")
+//   .patch(validateFavorite, noticesController.updateStatusContact);
 
 module.exports = router;

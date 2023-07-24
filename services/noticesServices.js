@@ -12,7 +12,7 @@ class NoticesService {
 
     if (favorite) query.favorite = favorite === "true";
 
-    const result = await Contact.find(query)
+    const result = await Notices.find(query)
       .skip(skip)
       .limit(limit)
       .populate("owner", "-_id, email");
@@ -29,7 +29,7 @@ class NoticesService {
    */
 
   getById = async (id) => {
-    const result = await Contact.findById(id);
+    const result = await Notices.findById(id);
 
     if (!result) throw appError(404, "Not found");
 
@@ -44,7 +44,7 @@ class NoticesService {
 
   remove = async (id) => {
     try {
-      await Contact.findByIdAndDelete(id);
+      await Notices.findByIdAndDelete(id);
       return { message: "contact deleted" };
     } catch (error) {
       console.log(error);
@@ -59,7 +59,7 @@ class NoticesService {
 
   add = async (body) => {
     try {
-      return await Contact.create(body);
+      return await Notices.create(body);
     } catch (error) {
       console.log(error);
     }
@@ -73,7 +73,7 @@ class NoticesService {
 
   update = async (id, body) => {
     try {
-      return await Contact.findByIdAndUpdate(id, body, { new: true });
+      return await Notices.findByIdAndUpdate(id, body, { new: true });
     } catch (error) {
       console.log(error);
     }

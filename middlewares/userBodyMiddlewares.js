@@ -1,11 +1,5 @@
-const {
-  catchAsync,
-  appError,
-  registerSchema,
-  loginSchema,
-  infoSchema,
-  verifySchema,
-} = require("../utils");
+const { userValidationSchema } = require("../validationShems");
+const { catchAsync, appError } = require("../utils");
 const ImageService = require("../services/ImageService");
 const CloudinaryService = require("../services/cloudinaryServices");
 
@@ -24,7 +18,7 @@ const validateRegisterBody = catchAsync(async (req, _, next) => {
       `missing field${bodyNoKey.length > 1 ? "s" : ""}: ${bodyNoKey}`
     );
 
-  const { error } = registerSchema.validate(req.body);
+  const { error } = userValidationSchema.register.validate(req.body);
   if (error) throw appError(400, error.message);
 
   next();
@@ -44,7 +38,7 @@ const validateLoginBody = catchAsync(async (req, _, next) => {
       `missing field${bodyNoKey.length > 1 ? "s" : ""}: ${bodyNoKey}`
     );
 
-  const { error } = loginSchema.validate(req.body);
+  const { error } = userValidationSchema.login.validate(req.body);
   if (error) throw appError(400, error.message);
   next();
 });
@@ -65,7 +59,7 @@ const validateUpdateInfo = catchAsync(async (req, _, next) => {
       400,
       `missing field${bodyNoKey.length > 1 ? "s" : ""}: ${bodyNoKey}`
     );
-  const { error } = infoSchema.validate(req.body);
+  const { error } = userValidationSchema.info.validate(req.body);
   if (error) throw appError(400, error.message);
 
   next();
@@ -75,7 +69,7 @@ const validateVerify = catchAsync(async (req, _, next) => {
   if (!Object.keys(req.body).includes("email"))
     throw appError(400, `missing field email`);
 
-  const { error } = verifySchema.validate(req.body);
+  const { error } = userValidationSchema.verify.validate(req.body);
   if (error) throw appError(400, error.message);
 
   next();

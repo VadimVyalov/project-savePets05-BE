@@ -2,40 +2,40 @@ const { noticesService } = require("../services");
 const { catchAsync } = require("../utils");
 
 class NoticesController {
-  listContacts = catchAsync(async (req, res) => {
+  list = catchAsync(async (req, res) => {
     const { id } = req.user;
     const params = { id, ...req.query };
-    const result = await contactService.list(params);
+    const result = await noticesService.list(params);
     res.status(200).json(result);
   });
 
   getById = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await contactService.getById(id);
+    const result = await noticesService.getById(id);
     res.status(200).json(result);
   });
 
-  removeContact = catchAsync(async (req, res) => {
+  remove = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await contactService.remove(id);
+    const result = await noticesService.remove(id);
     res.status(200).json(result);
   });
 
-  addContact = catchAsync(async (req, res) => {
+  add = catchAsync(async (req, res) => {
     const { id: owner } = req.user;
-    const result = await contactService.add({ ...req.body, owner });
+    const result = await noticesService.add({ ...req.body, owner });
     res.status(201).json(result);
   });
 
-  updateContact = catchAsync(async (req, res) => {
+  updateFavorite = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await contactService.update(id, req.body);
+    const result = await noticesService.update(id, req.body);
     res.status(200).json(result);
   });
 
   updateStatusContact = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await contacts.update(id, req.body);
+    const result = await noticesService.update(id, req.body);
     res.status(200).json(result);
   });
 }

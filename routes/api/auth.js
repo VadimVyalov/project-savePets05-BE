@@ -2,7 +2,6 @@ const { Router } = require("express");
 const { userController } = require("../../controllers");
 
 const {
-  auth,
   validateLoginBody,
   validateRegisterBody,
   validateUpdateInfo,
