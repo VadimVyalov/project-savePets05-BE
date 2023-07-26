@@ -1,4 +1,4 @@
-const User = require("../models/userSchema");
+const User = require("../models/userModel");
 const { catchAsync, appError, sendEmail } = require("../utils");
 
 const userService = require("../services/userServices");

@@ -8,6 +8,7 @@ const {
   validateFavorite,
   authAccess,
   uploadNotice,
+  validateNoticeQuery,
 } = require("../../middlewares");
 
 const router = Router();
@@ -16,20 +17,22 @@ router.use("/", authAccess);
 
 //router.post("/", uploadNotice, validateNoticeBody);
 
-router.route("/").post(uploadNotice, validateNoticeBody, noticesController.add);
-//   .post(validateNoticeBody, noticesController.addContact)
-//   .get(noticesController.listContacts);
+router
+  .route("/")
+  .post(uploadNotice, validateNoticeBody, noticesController.add)
+  //   .post(validateNoticeBody, noticesController.add)
+  .get(validateNoticeQuery, noticesController.list);
 
 // router.use("/:id", checkById);
 
 // router
 //   .route("/:id")
 //   .get(noticesController.getById)
-//   .delete(noticesController.removeContact)
-//   .put(validateNoticeBody, noticesController.updateContact);
+//   .delete(noticesController.remove)
+//   .put(validateNoticeBody, noticesController.update);
 
 // router
 //   .route("/:id/favorite")
-//   .patch(validateFavorite, noticesController.updateStatusContact);
+//   .patch(validateFavorite, noticesController.updateFavorit);
 
 module.exports = router;

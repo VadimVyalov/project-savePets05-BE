@@ -23,7 +23,7 @@ class NoticesController {
 
   add = catchAsync(async (req, res) => {
     const { id: owner } = req.user;
-    const result = await noticesService.add({ ...req.body, owner });
+    const result = await noticesService.add({ ...req.body, owner }, req.file);
     res.status(201).json(result);
   });
 

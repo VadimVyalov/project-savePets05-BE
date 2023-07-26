@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { REGEXP } = require("../config/config");
+const { REGEXP } = require("../config");
 
 class UserValidationSchema {
   register = Joi.object({

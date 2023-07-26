@@ -1,5 +1,5 @@
 const { catchAsync, appError } = require("../utils");
-const User = require("../models/userSchema");
+const User = require("../models/userModel");
 
 const passport = require("passport");
 
