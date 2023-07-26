@@ -1,12 +1,12 @@
 const { Schema, model } = require("mongoose");
 const { mongooseError } = require("../utils");
-
+const { CATEGORY, SEX } = require("../config");
 const notice = new Schema(
   {
     category: {
       type: String,
-      enum: ["sell", "lost-found", "for-free"],
-      default: "sell",
+      enum: CATEGORY,
+      default: CATEGORY[0],
     },
 
     title: {
@@ -18,17 +18,18 @@ const notice = new Schema(
       default: null,
     },
     birthday: {
-      type: String,
+      type: Date,
       default: null,
     },
+
     type: {
       type: String,
       default: null,
     },
     sex: {
       type: String,
-      enum: ["male", "female"],
-      default: "male",
+      enum: SEX,
+      default: SEX[0],
     },
     photoUrl: {
       type: String,
@@ -42,20 +43,27 @@ const notice = new Schema(
     price: {
       type: Number,
       min: 1,
-      required: (category) => category === "sell",
+      required: (category) => category === CATEGORY[0],
       default: null,
     },
     comments: {
       type: String,
       default: null,
     },
-
+    follower: {
+      type: Array,
+      default: [],
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 notice.post("save", mongooseError);

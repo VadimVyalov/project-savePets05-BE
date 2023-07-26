@@ -1,25 +1,63 @@
-const Notices = require("../models/noticeSchema");
+const Notices = require("../models/noticeModel");
 const { appError } = require("../utils");
+const CloudinaryService = require("./cloudinaryServices");
+const moment = require("moment");
 class NoticesService {
+  /**
+   * add new notice to db
+   */
+
+  add = async (body, file) => {
+    if (!file) throw appError(401, "File is require!");
+    const photoUrl = await CloudinaryService.save(file, {}, "notices");
+    body.birthday = body.birthday.split("-").reverse().join("-");
+    const notice = await Notices.create({ ...body, photoUrl });
+    const { _id: id, owner, ...result } = notice.toObject();
+
+    return { id, ...result };
+  };
+
   /**
    * Get list notice from db
    */
 
   list = async (params) => {
-    const { id: owner, page = 1, limit = 10, favorite } = params;
-    const skip = (page - 1) * limit;
-    const query = { owner };
+    const {
+      sex = null,
+      title = null,
+      category = null,
+      birthday = null,
+      pagination = null,
+    } = params;
 
-    if (favorite) query.favorite = favorite === "true";
+    const query = {};
 
-    const result = await Notices.find(query)
-      .skip(skip)
-      .limit(limit)
-      .populate("owner", "-_id, email");
+    if (birthday) query.birthday = birthday;
+    if (category) query.category = category;
+    if (title) query.title = { $regex: title, $options: "i" };
+    if (sex) query.sex = sex;
 
-    if (!result) throw appError(404, "Not found");
+    const total = await Notices.find({ ...query });
+    if (!total?.length) throw appError(404, "Not found");
 
-    return result;
+    const notice = await Notices.find({ ...query }, null, pagination)
+      .sort("-updatedAt")
+      .select("-createdAt -updatedAt")
+      .populate("owner", "-_id, email phone");
+
+    const result = notice.map((e) => {
+      const { _id: id, owner, ...result } = e.toObject();
+      return {
+        id,
+        ...result,
+        age: moment().diff(e.birthday, "month", false),
+        birthday: moment(e.birthday).format("DD-MM-YYYY"),
+        email: owner.email,
+        phone: owner.phone,
+      };
+    });
+
+    return { total: total.length, notice: result };
   };
 
   /**
@@ -46,20 +84,6 @@ class NoticesService {
     try {
       await Notices.findByIdAndDelete(id);
       return { message: "contact deleted" };
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  /**
-   * add new notice to db
-   * @param {object} body {name, email, phone} new contact
-   *
-   */
-
-  add = async (body) => {
-    try {
-      return await Notices.create(body);
     } catch (error) {
       console.log(error);
     }

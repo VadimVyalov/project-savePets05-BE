@@ -1,4 +1,4 @@
-const User = require("../models/userSchema");
+const User = require("../models/userModel");
 const { appError } = require("../utils");
 const ImageService = require("./ImageService");
 const CloudinaryService = require("./cloudinaryServices");

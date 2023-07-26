@@ -18,7 +18,7 @@ const REGEXP = {
   },
   name: {
     // reg: /^[^`][^\d_!¡?÷?¿+=@#$%ˆ&*(){.,}| ~<>;:\^\[\]\-\/\\]{1,14}$/,
-    reg: /^[\p{Lu}]{1}[\p{Ll}'`]{1,15}$/u,
+    reg: /^[\p{Lu}]{1}[\p{Ll}'`\d]{1,15}$/u,
     mes: "Field 'name' must contain minimum 2 characters, maximum 16, only unicode letter and first leter uppercase",
   },
   city: {
@@ -37,4 +37,8 @@ NOTISE_BODY = [
   "sex",
   "location",
 ];
-module.exports = { TOKEN, REGEXP, NOTISE_BODY };
+
+CATEGORY = ["sell", "lost-found", "for-free"];
+SEX = ["male", "female"];
+
+module.exports = { TOKEN, REGEXP, NOTISE_BODY, CATEGORY, SEX };

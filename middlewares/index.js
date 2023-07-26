@@ -3,16 +3,17 @@ const {
   validateNoticeBody,
   validateFavorite,
   uploadNotice,
-} = require("./noticeBodyMiddlewares");
+  validateNoticeQuery,
+} = require("./noticeMiddlewares");
 const {
   validateRegisterBody,
   validateLoginBody,
   validateUpdateInfo,
   validateVerify,
   uploadUserAvatar,
-} = require("./userBodyMiddlewares");
+} = require("./userMiddlewares");
 const { auth } = require("./auth");
-const { authAccess, authRefresh } = require("./authAlt");
+const { authAccess, authRefresh } = require("./authMiddelewares");
 
 module.exports = {
   checkById,
@@ -27,5 +28,6 @@ module.exports = {
   authAccess,
   authRefresh,
   uploadNotice,
+  validateNoticeQuery,
   //ImageService,
 };
