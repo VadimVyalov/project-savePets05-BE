@@ -26,6 +26,18 @@ const REGEXP = {
     reg: /^[\p{Lu}]{1}[\p{Ll}'`]{1,31}$/u,
     mes: "Field 'city' must contain minimum 2 characters, maximum 32, only unicode letter and first leter uppercase",
   },
+  title: {
+    reg: /^[\p{Ll}' `\d]{1,31}$/u,
+    mes: "Field 'title' must contain minimum 2 characters, maximum 32, only unicode letter and digit ",
+  },
+  type: {
+    reg: /^[\p{Ll}'`\d]{1,15}$/u,
+    mes: "Field 'type' must contain minimum 2 characters, maximum 16, only unicode letter",
+  },
+  location: {
+    reg: /^[\p{Lu}]{1}[\p{Ll}'`]{1,31}$/u,
+    mes: "Field 'location' must contain minimum 2 characters, maximum 32, only unicode letter and first leter uppercase",
+  },
 };
 
 NOTISE_BODY = [
