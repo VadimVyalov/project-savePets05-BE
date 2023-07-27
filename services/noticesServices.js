@@ -19,7 +19,7 @@ class NoticesService {
   };
 
   /**
-   * Get list notice from db
+   * Get list notices from db
    */
 
   list = async (params) => {
@@ -29,6 +29,7 @@ class NoticesService {
       category = null,
       birthday = null,
       pagination = null,
+      userId = null,
     } = params;
 
     const query = {};
@@ -38,24 +39,29 @@ class NoticesService {
     if (title) query.title = { $regex: title, $options: "i" };
     if (sex) query.sex = sex;
     query.deleted = false;
+
     const total = await Notices.find({ ...query });
     if (!total?.length) throw appError(404, "Not found");
 
     const notice = await Notices.find({ ...query }, null, pagination)
       .sort("-updatedAt")
-      .select("-createdAt -updatedAt -deleted")
-      .populate("owner", "-_id, email phone");
+      .select("_id category sex birthday location title photoUrl follower");
 
     const result = notice.map((e) => {
-      const { _id: id, owner, ...result } = e.toObject();
+      const { _id: id, birthday, ...result } = e.toObject();
+      const age =
+        moment().diff(birthday, "year", false) < 1
+          ? ` ${moment().diff(birthday, "month", false)} month`
+          : moment().diff(birthday, "year", false) < 2
+          ? `1 year`
+          : `${moment().diff(birthday, "year", false)} years`;
+
       return {
         id,
         ...result,
         follower: e.follower.length,
-        age: moment().diff(e.birthday, "month", false),
-        birthday: moment(e.birthday).format("DD-MM-YYYY"),
-        email: owner.email,
-        phone: owner.phone,
+        favorite: e.follower.includes(userId),
+        age,
       };
     });
 
@@ -64,13 +70,13 @@ class NoticesService {
 
   /**
    * Get unique notice by id from db
-   * @param {string} id - search contact id
+   * @param {string} id -  notice id
    *
    */
 
-  getById = async (id) => {
+  getById = async (id, userId) => {
     const result = await Notices.findById(id)
-      .select("-createdAt -updatedAt")
+      .select("-createdAt -updatedAt -deleted")
       .populate("owner", "-_id, email phone");
 
     if (!result) throw appError(404, "Not found");
@@ -79,12 +85,19 @@ class NoticesService {
 
     return {
       ...notice,
-      age: moment().diff(notice.birthday, "month", false),
       birthday: moment(notice.birthday).format("DD-MM-YYYY"),
       email: owner.email,
       phone: owner.phone,
+      follower: notice.follower.length,
+      favorite: notice.follower.includes(userId),
     };
   };
+
+  /**
+   * Get owner notices from db
+   * @param {string} owner -  owner id
+   *
+   */
 
   getByOwner = async (owner) => {
     const notice = await Notices.find({ owner }).select(
@@ -107,24 +120,21 @@ class NoticesService {
   };
 
   /**
-   * remove unique  notice by id from db
-   * @param {string} id - search contact id
+   * remove owner notice by id from db
+   * @param {string} noticeId - notice id
+   * @param {string} userId - owner id
    *
    */
 
   remove = async (noticeId, userId) => {
-    try {
-      const result = await Notices.findOneAndUpdate(
-        { _id: noticeId, owner: userId },
-        { deleted: true },
-        { new: true }
-      );
-      if (!result) throw appError(404, "Not found");
+    const result = await Notices.findOneAndUpdate(
+      { _id: noticeId, owner: userId, deleted: false },
+      { deleted: true }
+    );
 
-      return { id: noticeId, deleted: result.deleted };
-    } catch (error) {
-      console.log(error);
-    }
+    if (!result) throw appError(404, "Not found");
+
+    return { id: noticeId, deleted: result.deleted };
   };
 
   /**
@@ -142,51 +152,45 @@ class NoticesService {
   // };
 
   follow = async (noticeId, userId) => {
-    try {
-      const notice = await Notices.findById(noticeId);
-      if (!notice) throw appError(404, "Not found");
+    const notice = await Notices.findById(noticeId);
+    if (!notice) throw appError(404, "Not found");
 
-      const query = { follower: { $pull: { follower: userId } } };
+    const query = { follower: { $pull: { follower: userId } } };
 
-      const { follower } = notice;
+    const { follower } = notice;
 
-      if (!follower.includes(userId))
-        query.follower = { $push: { follower: userId } };
+    if (!follower.includes(userId))
+      query.follower = { $push: { follower: userId } };
 
-      const result = await Notices.findByIdAndUpdate(noticeId, query.follower, {
-        new: true,
-      })
-        .sort("-updatedAt")
-        .select("-createdAt -updatedAt");
+    const result = await Notices.findByIdAndUpdate(noticeId, query.follower, {
+      new: true,
+    })
+      .sort("-updatedAt")
+      .select("-createdAt -updatedAt");
 
-      // const result = notice.map((e) => {
-      //   const { _id: id, owner, ...result } = e.toObject();
-      //   return {
-      //     id,
-      //     ...result,
-      //     age: moment().diff(e.birthday, "month", false),
-      //     birthday: moment(e.birthday).format("DD-MM-YYYY"),
-      //     email: owner.email,
-      //     phone: owner.phone,
-      //   };
-      // });
+    if (!result) throw appError(404, "Not found");
 
-      return { result };
-    } catch (error) {
-      console.log(error);
-    }
+    // const result = notice.map((e) => {
+    //   const { _id: id, owner, ...result } = e.toObject();
+    //   return {
+    //     id,
+    //     ...result,
+    //     age: moment().diff(e.birthday, "month", false),
+    //     birthday: moment(e.birthday).format("DD-MM-YYYY"),
+    //     email: owner.email,
+    //     phone: owner.phone,
+    //   };
+    // });
+
+    return { result };
   };
 
   favorite = async (id) => {
-    try {
-      const result = await Notices.find({
-        follower: { $elemMatch: { $eq: id } },
-      }).select("-createdAt -updatedAt");
+    const result = await Notices.find({
+      follower: { $elemMatch: { $eq: id } },
+    }).select("-createdAt -updatedAt");
 
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
+    return result;
   };
 }
 const noticesService = new NoticesService();
