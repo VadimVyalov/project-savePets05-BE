@@ -1,3 +1,3 @@
 const userValidationSchema = require("./userValidationSchema");
-
-module.exports = { userValidationSchema };
+const noticeValidationSchema = require("./noticeValidationSchema");
+module.exports = { userValidationSchema, noticeValidationSchema };

@@ -1,38 +1,49 @@
 const { Router } = require("express");
 const { noticesController } = require("../../controllers");
-const multer = require("multer");
 
 const {
   checkById,
-  validateNoticeBody,
-  validateFavorite,
+
   authAccess,
-  uploadNotice,
-  validateNoticeQuery,
+  validateNotice,
 } = require("../../middlewares");
 
 const router = Router();
 
-router.use("/", authAccess);
+// === Autorize
 
-//router.post("/", uploadNotice, validateNoticeBody);
+router.post(
+  "/",
+  authAccess,
+  validateNotice.upload,
+  validateNotice.body,
+  noticesController.add
+);
+router.get("/myads", authAccess, noticesController.getByOwner);
 
-router
-  .route("/")
-  .post(uploadNotice, validateNoticeBody, noticesController.add)
-  //   .post(validateNoticeBody, noticesController.add)
-  .get(validateNoticeQuery, noticesController.list);
+router.get("/favorite", authAccess, noticesController.favorite);
 
-// router.use("/:id", checkById);
+router.patch(
+  "/favorite/:id",
+  authAccess,
+  validateNotice.checkId,
+  noticesController.follow
+);
+router.delete(
+  "/:id",
+  authAccess,
+  validateNotice.checkId,
+  noticesController.remove
+);
 
-// router
-//   .route("/:id")
-//   .get(noticesController.getById)
-//   .delete(noticesController.remove)
-//   .put(validateNoticeBody, noticesController.update);
-
-// router
-//   .route("/:id/favorite")
-//   .patch(validateFavorite, noticesController.updateFavorit);
+// === Not autorize
+router.get("/:id", validateNotice.checkId, noticesController.getById);
+router.get("/", validateNotice.query, noticesController.list);
+router.get(
+  "/category/:category",
+  validateNotice.query,
+  validateNotice.params,
+  noticesController.list
+);
 
 module.exports = router;

@@ -3,9 +3,18 @@ const { catchAsync } = require("../utils");
 
 class NoticesController {
   list = catchAsync(async (req, res) => {
-    const { id } = req.user;
-    const params = { id, ...req.query };
-    const result = await noticesService.list(params);
+    const result = await noticesService.list(req.query);
+    res.status(200).json(result);
+  });
+
+  getByOwner = catchAsync(async (req, res) => {
+    const { id: owner } = req.user;
+    const result = await noticesService.getByOwner(owner);
+    res.status(200).json(result);
+  });
+
+  listByCategory = catchAsync(async (req, res) => {
+    const result = await noticesService.list(req.query);
     res.status(200).json(result);
   });
 
@@ -16,8 +25,9 @@ class NoticesController {
   });
 
   remove = catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const result = await noticesService.remove(id);
+    const { id: noticeId } = req.params;
+    const { id: userId } = req.user;
+    const result = await noticesService.remove(noticeId, userId);
     res.status(200).json(result);
   });
 
@@ -27,15 +37,21 @@ class NoticesController {
     res.status(201).json(result);
   });
 
-  updateFavorite = catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const result = await noticesService.update(id, req.body);
+  follow = catchAsync(async (req, res) => {
+    const { id: noticeId } = req.params;
+    const { id: userId } = req.user;
+    const result = await noticesService.follow(noticeId, userId);
+
+    // const result = await noticesService.update(id, req.body);
+
     res.status(200).json(result);
   });
 
-  updateStatusContact = catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const result = await noticesService.update(id, req.body);
+  favorite = catchAsync(async (req, res) => {
+    const { id: userId } = req.user;
+
+    const result = await noticesService.favorite(userId);
+
     res.status(200).json(result);
   });
 }
