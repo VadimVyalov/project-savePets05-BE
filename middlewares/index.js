@@ -7,9 +7,10 @@ const {
   uploadUserAvatar,
 } = require("./userMiddlewares");
 const { auth } = require("./auth");
-const { authAccess, authRefresh } = require("./authMiddelewares");
+const { authAccess, authRefresh, checkUser } = require("./authMiddelewares");
 
 module.exports = {
+  validateNotice,
   auth,
   validateRegisterBody,
   validateLoginBody,
@@ -18,5 +19,5 @@ module.exports = {
   uploadUserAvatar,
   authAccess,
   authRefresh,
-  validateNotice,
+  checkUser,
 };
