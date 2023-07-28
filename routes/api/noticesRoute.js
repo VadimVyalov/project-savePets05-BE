@@ -36,7 +36,12 @@ router.delete(
 );
 
 // === Not autorize
-router.get("/", checkUser, validateNotice.query, noticesController.list);
+router.get(
+  "/category",
+  checkUser,
+  validateNotice.query,
+  noticesController.list
+);
 router.get(
   "/category/:category",
   checkUser,
