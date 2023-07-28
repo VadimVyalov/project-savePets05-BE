@@ -4,6 +4,7 @@ const moment = require("moment");
 const { NOTISE_BODY, CATEGORY, SEX } = require("../config");
 const CloudinaryService = require("../services/cloudinaryServices");
 const { noticeValidationSchema } = require("../validationShems");
+
 class ValidateNotice {
   body = catchAsync(async (req, _, next) => {
     const bodyData = Object.keys(req.body);

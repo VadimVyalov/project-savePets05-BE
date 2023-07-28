@@ -46,8 +46,6 @@ class NoticesController {
     const { id: userId } = req.user;
     const result = await noticesService.follow(noticeId, userId);
 
-    // const result = await noticesService.update(id, req.body);
-
     res.status(200).json(result);
   });
 
@@ -57,6 +55,7 @@ class NoticesController {
     res.status(200).json(result);
   });
 }
+
 const noticesController = new NoticesController();
 
 module.exports = noticesController;

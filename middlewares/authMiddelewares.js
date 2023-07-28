@@ -44,31 +44,6 @@ const authAccess = catchAsync(async (req, res, next) => {
   )(req, res, next);
 });
 
-const checkUser = catchAsync(async (req, res, next) => {
-  const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-
-  passport.authenticate(
-    jwtAccesStrategy,
-    { session: false },
-    (err, user, info) => {
-      if (
-        err ||
-        info ||
-        user?.token?.access !== token ||
-        !user?.token?.refresh
-      ) {
-        //  console.log("noLogin");
-        req.user = { id: null };
-      } else {
-        // console.log("Login");
-        req.user = { id: user.id };
-      }
-
-      next();
-    }
-  )(req, res, next);
-});
-
 //=============
 
 const jwtRefreshStrategy = new Strategy(
@@ -91,6 +66,24 @@ const authRefresh = catchAsync(async (req, res, next) => {
 
       const { id } = user;
       req.user = { id };
+
+      next();
+    }
+  )(req, res, next);
+});
+
+//==============
+
+const checkUser = catchAsync(async (req, res, next) => {
+  const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+
+  passport.authenticate(
+    jwtAccesStrategy,
+    { session: false },
+    (err, user, info) => {
+      if (err || info || user?.token?.access !== token || !user?.token?.refresh)
+        req.user = { id: null };
+      else req.user = { id: user.id };
 
       next();
     }

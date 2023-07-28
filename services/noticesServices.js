@@ -124,7 +124,7 @@ class NoticesService {
       };
     });
 
-    return result;
+    return { total: result.length, notice: result };
   };
 
   /**
@@ -219,7 +219,7 @@ class NoticesService {
       };
     });
 
-    return result;
+    return { total: result.length, notice: result };
   };
 }
 const noticesService = new NoticesService();
