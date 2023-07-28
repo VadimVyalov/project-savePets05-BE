@@ -1,12 +1,7 @@
 const { Router } = require("express");
 const { noticesController } = require("../../controllers");
 
-const {
-  checkById,
-  checkUser,
-  authAccess,
-  validateNotice,
-} = require("../../middlewares");
+const { checkUser, authAccess, validateNotice } = require("../../middlewares");
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 const { userValidationSchema } = require("../validationShems");
 const { catchAsync, appError } = require("../utils");
-const ImageService = require("../services/ImageService");
+//const ImageService = require("../services/ImageService");
 const CloudinaryService = require("../services/cloudinaryServices");
 
 const validateRegisterBody = catchAsync(async (req, _, next) => {
