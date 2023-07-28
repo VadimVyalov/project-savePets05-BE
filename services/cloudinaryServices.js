@@ -60,6 +60,7 @@ class CloudinaryService {
         dataURI,
         cloudinaryOptions
       );
+      //console.log(cloudinaryResponse);
       const { public_id, version, format } = cloudinaryResponse;
       // const baseImgUrl = "https://res.cloudinary.com/dfvviqdic/image/upload/";
       const imgUrl = `v${version}/${public_id}.${format}`;

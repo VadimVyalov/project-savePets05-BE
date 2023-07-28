@@ -64,7 +64,6 @@ const checkUser = catchAsync(async (req, res, next) => {
         req.user = { id: user.id };
       }
 
-      console.log("check", req.user);
       next();
     }
   )(req, res, next);

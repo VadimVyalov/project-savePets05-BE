@@ -100,13 +100,13 @@ class UserServuces {
   };
 
   current = async (id) => {
-    let result = await User.findById(id).select([
+    const user = await User.findById(id).select([
       "-_id",
       "-token",
       "-password",
     ]);
 
-    result = result.toObject();
+    const result = user.toObject();
     result.birthday = moment(result.birthday).format("DD-MM-YYYY");
 
     return result;
@@ -114,7 +114,6 @@ class UserServuces {
 
   updateInfo = async (id, info) => {
     info.birthday = info.birthday.split("-").reverse().join("-");
-    // console.log(moment(info.birthday).add(13, "M").format("DD-MM-YYYY"));
     const user = await User.findByIdAndUpdate(id, info, { new: true });
     if (!user) throw appError(401, "Update user info wrong");
 
@@ -125,9 +124,10 @@ class UserServuces {
     if (!file) throw appError(401, "File is require!");
 
     const avatarURL = await CloudinaryService.save(file, {}, "avatars");
-
     const user = await User.findByIdAndUpdate(id, { avatarURL }, { new: true });
+
     if (!user) throw appError(401, "Update avatar wrong");
+
     return user.avatarURL;
   };
 

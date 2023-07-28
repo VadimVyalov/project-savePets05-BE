@@ -6,15 +6,12 @@ class NoticesController {
     const query = req.query;
     if (req.user) query.userId = req.user.id;
 
-    console.log("user contr", req.user);
-
     const result = await noticesService.list(query);
     res.status(200).json(result);
   });
 
   getByOwner = catchAsync(async (req, res) => {
     const { id: owner } = req.user;
-    // console.log("user contr", req.user);
     const result = await noticesService.getByOwner(owner);
     res.status(200).json(result);
   });
@@ -56,9 +53,7 @@ class NoticesController {
 
   favorite = catchAsync(async (req, res) => {
     const { id: userId } = req.user;
-
     const result = await noticesService.favorite(userId);
-
     res.status(200).json(result);
   });
 }

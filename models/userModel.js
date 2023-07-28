@@ -80,17 +80,17 @@ user.methods.getToken = function (secret, exp) {
 user.post("save", mongooseError);
 
 user.pre("save", async function (next) {
-  if (this.isNew) {
-    const avatarURL = gravatar.url(this.email, {
-      s: "250",
-      r: "g",
-      d: "wavatar",
-    });
-    this.avatarURL = avatarURL;
-    this.verificationToken = v4();
+  // if (this.isNew) {
+  //   const avatarURL = gravatar.url(this.email, {
+  //     s: "250",
+  //     r: "g",
+  //     d: "wavatar",
+  //   });
+  //   this.avatarURL = avatarURL;
+  //   this.verificationToken = v4();
 
-    // console.log(this.birthday);
-  }
+  //   // console.log(this.birthday);
+  // }
 
   if (!this.isModified("password")) return next();
 
