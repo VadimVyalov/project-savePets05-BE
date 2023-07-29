@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const { appError } = require("../utils");
-const ImageService = require("./ImageService");
+// const ImageService = require("./ImageService");
 const CloudinaryService = require("./cloudinaryServices");
 const moment = require("moment");
 class UserServuces {
