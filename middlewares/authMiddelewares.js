@@ -43,7 +43,7 @@ const authAccess = catchAsync(async (req, res, next) => {
   )(req, res, next);
 });
 
-//=============
+//  =============
 
 const jwtRefreshStrategy = new Strategy(
   {
@@ -62,7 +62,7 @@ const authRefresh = catchAsync(async (req, res, next) => {
     (err, user, info) => {
       if (err || info || user?.token?.refresh !== token || !user?.token?.access)
         return next(appError(401, "Not authorized"));
-
+      const { id } = user;
       req.user = { id };
 
       next();
@@ -70,7 +70,7 @@ const authRefresh = catchAsync(async (req, res, next) => {
   )(req, res, next);
 });
 
-//==============
+//  ==============
 
 const checkUser = catchAsync(async (req, res, next) => {
   const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);

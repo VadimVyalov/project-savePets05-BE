@@ -3,6 +3,7 @@ const path = require("path");
 const fse = require("fs-extra");
 const sharp = require("sharp");
 const { v4 } = require("uuid");
+const { appError } = require("../utils");
 
 class ImageService {
   static upload(name) {

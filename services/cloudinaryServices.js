@@ -60,12 +60,12 @@ class CloudinaryService {
         dataURI,
         cloudinaryOptions
       );
-      //console.log(cloudinaryResponse);
+      //  console.log(cloudinaryResponse);
       const { public_id, version, format } = cloudinaryResponse;
-      // const baseImgUrl = "https://res.cloudinary.com/dfvviqdic/image/upload/";
+      //  const baseImgUrl = "https://res.cloudinary.com/dfvviqdic/image/upload/";
       const imgUrl = `v${version}/${public_id}.${format}`;
-      // const fullImgUrl = baseImgUrl + imgUrl;
-      // console.log(fullImgUrl);
+      //  const fullImgUrl = baseImgUrl + imgUrl;
+      //  console.log(fullImgUrl);
       return imgUrl;
     } catch (err) {
       throw appError(400, "Cloudinary bad response ...");
@@ -73,5 +73,4 @@ class CloudinaryService {
   }
 }
 
-//module.exports = uploadCloud;
 module.exports = CloudinaryService;

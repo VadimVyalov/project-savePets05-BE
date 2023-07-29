@@ -1,4 +1,3 @@
-//const createTodo = require("../../components/schemas/");
 module.exports = {
   "/api/users/login": {
     post: {

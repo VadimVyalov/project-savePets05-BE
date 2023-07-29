@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
-
+const { appError } = require("./appError");
 const sendEmail = async (email, token) => {
   const { GMAIL_USER, GMAIL_API_KEY, SERVER_URL } = process.env;
 

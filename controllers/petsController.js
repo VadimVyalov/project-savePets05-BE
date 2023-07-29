@@ -1,7 +1,7 @@
 const { petService } = require("../services");
 const { catchAsync } = require("../utils");
 
-class PetController {
+const PetController = class {
   list = catchAsync(async (req, res) => {
     const { query, user } = req;
 
@@ -22,7 +22,7 @@ class PetController {
     const result = await petService.add({ ...req.body, owner }, req.file);
     res.status(201).json(result);
   });
-}
+};
 
 const petController = new PetController();
 

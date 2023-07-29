@@ -2,8 +2,8 @@ const { Schema, model } = require("mongoose");
 const { mongooseError } = require("../utils");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const gravatar = require("gravatar");
-const { v4 } = require("uuid");
+//  const gravatar = require("gravatar");
+//  const { v4 } = require("uuid");
 
 const user = new Schema(
   {

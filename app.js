@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
-//const swagger = require("./swagger");
+// const swagger = require("./swagger");
 const swagger = require("./docs");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./.env" });
@@ -25,7 +25,7 @@ app.use("/api/users", userRouter);
 app.use("/api/pet", petRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
-//console.log(process.env.SERVER_URL);
+// console.log(process.env.SERVER_URL);
 app.all("*", (_, res) => {
   res.status(404).json({
     message: "Oops! Resource not found..",

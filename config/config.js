@@ -40,7 +40,7 @@ const REGEXP = {
   },
 };
 
-NOTISE_BODY = [
+const NOTISE_BODY = [
   "title",
   "category",
   "name",
@@ -50,9 +50,9 @@ NOTISE_BODY = [
   "location",
 ];
 
-PET_BODY = ["name", "birthday", "type", "location"];
+const PET_BODY = ["name", "birthday", "type", "location"];
 
-CATEGORY = ["sell", "lost-found", "for-free"];
-SEX = ["male", "female"];
+const CATEGORY = ["sell", "lost-found", "for-free"];
+const SEX = ["male", "female"];
 
 module.exports = { TOKEN, REGEXP, NOTISE_BODY, PET_BODY, CATEGORY, SEX };
