@@ -1,6 +1,5 @@
 const { catchAsync } = require("../utils");
-
-const userService = require("../services");
+const { userService } = require("../services");
 
 class UserController {
   registration = catchAsync(async (req, res) => {

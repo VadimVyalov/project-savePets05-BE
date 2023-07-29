@@ -39,7 +39,7 @@ class UserServuces {
   };
 
   login = async (body) => {
-    const { TOKEN } = require("../config/config");
+    const { TOKEN } = require("../config");
     const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } = process.env;
     const { email, password } = body;
     const token = {};
