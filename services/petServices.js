@@ -1,4 +1,4 @@
-const Pet = require("../models/PetModel");
+const Pet = require("../models/petModel");
 const { appError } = require("../utils");
 const CloudinaryService = require("./cloudinaryServices");
 const moment = require("moment");

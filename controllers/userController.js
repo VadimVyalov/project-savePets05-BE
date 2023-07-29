@@ -1,7 +1,7 @@
-const User = require("../models/userModel");
-const { catchAsync, appError, sendEmail } = require("../utils");
+const { catchAsync } = require("../utils");
 
-const userService = require("../services/userServices");
+const userService = require("../services");
+
 class UserController {
   registration = catchAsync(async (req, res) => {
     const result = await userService.registration(req.body);
