@@ -50,7 +50,9 @@ NOTISE_BODY = [
   "location",
 ];
 
+PET_BODY = ["name", "birthday", "type", "location"];
+
 CATEGORY = ["sell", "lost-found", "for-free"];
 SEX = ["male", "female"];
 
-module.exports = { TOKEN, REGEXP, NOTISE_BODY, CATEGORY, SEX };
+module.exports = { TOKEN, REGEXP, NOTISE_BODY, PET_BODY, CATEGORY, SEX };

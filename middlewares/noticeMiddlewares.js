@@ -116,7 +116,7 @@ class ValidateNotice {
   checkId = catchAsync(async (req, _, next) => {
     const { id } = req.params;
 
-    if (!isValidObjectId(id)) throw appError(400, "id no valid");
+    if (!isValidObjectId(id)) throw appError(400, "id no valid by notice");
 
     next();
   });

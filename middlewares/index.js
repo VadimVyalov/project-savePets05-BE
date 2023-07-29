@@ -1,4 +1,6 @@
 const validateNotice = require("./noticeMiddlewares");
+const validatePet = require("./petMiddlewares");
+
 const {
   validateRegisterBody,
   validateLoginBody,
@@ -7,10 +9,16 @@ const {
   uploadUserAvatar,
 } = require("./userMiddlewares");
 const { auth } = require("./auth");
-const { authAccess, authRefresh, checkUser } = require("./authMiddelewares");
+const {
+  authAccess,
+  authRefresh,
+  checkUser,
+  authUser,
+} = require("./authMiddelewares");
 
 module.exports = {
   validateNotice,
+  validatePet,
   auth,
   validateRegisterBody,
   validateLoginBody,
@@ -20,4 +28,5 @@ module.exports = {
   authAccess,
   authRefresh,
   checkUser,
+  authUser,
 };
