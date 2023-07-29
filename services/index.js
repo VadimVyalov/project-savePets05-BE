@@ -1,3 +1,4 @@
 const noticesService = require("./noticesServices");
 const userService = require("./userServices");
-module.exports = { noticesService, userService };
+const petService = require("./petServices");
+module.exports = { noticesService, userService, petService };

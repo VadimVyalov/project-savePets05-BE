@@ -7,8 +7,9 @@ const swagger = require("./docs");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./.env" });
 
-const noticesRouter = require("./routes/api/noticesRoute");
-const usersRouter = require("./routes/api/authRoute");
+const noticeRouter = require("./routes/api/noticesRoute");
+const userRouter = require("./routes/api/authRoute");
+const petRouter = require("./routes/api/petRoute");
 
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -19,8 +20,9 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-app.use("/api/notices", noticesRouter);
-app.use("/api/users", usersRouter);
+app.use("/api/notices", noticeRouter);
+app.use("/api/users", userRouter);
+app.use("/api/pet", petRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
 //console.log(process.env.SERVER_URL);

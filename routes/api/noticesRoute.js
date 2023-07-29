@@ -38,7 +38,7 @@ router.get(
   noticesController.list
 );
 router.get(
-  "/category/:category",
+  "/categories/:category",
   checkUser,
   validateNotice.query,
   validateNotice.params,

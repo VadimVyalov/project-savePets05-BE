@@ -35,7 +35,6 @@ const authAccess = catchAsync(async (req, res, next) => {
     (err, user, info) => {
       if (err || info || user?.token?.access !== token || !user?.token?.refresh)
         return next(appError(401, "Not authorized"));
-
       const { id } = user;
       req.user = { id };
 
@@ -64,7 +63,6 @@ const authRefresh = catchAsync(async (req, res, next) => {
       if (err || info || user?.token?.refresh !== token || !user?.token?.access)
         return next(appError(401, "Not authorized"));
 
-      const { id } = user;
       req.user = { id };
 
       next();
@@ -90,8 +88,27 @@ const checkUser = catchAsync(async (req, res, next) => {
   )(req, res, next);
 });
 
+const authUser = catchAsync(async (req, res, next) => {
+  const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+
+  passport.authenticate(
+    jwtAccesStrategy,
+    { session: false },
+    (err, user, info) => {
+      if (err || info || user?.token?.access !== token || !user?.token?.refresh)
+        return next(appError(401, "Not authorized"));
+
+      const { _id, email, name, birthday, phone, city, avatarURL } = user;
+      req.user = { id: _id, email, name, birthday, phone, city, avatarURL };
+
+      next();
+    }
+  )(req, res, next);
+});
+
 module.exports = {
   authAccess,
   authRefresh,
   checkUser,
+  authUser,
 };

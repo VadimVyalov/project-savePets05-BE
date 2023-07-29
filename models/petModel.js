@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const { mongooseError } = require("../utils");
-const { CATEGORY, SEX } = require("../config");
-const notice = new Schema(
+const { SEX } = require("../config");
+const pet = new Schema(
   {
     name: {
       type: String,
@@ -16,11 +16,11 @@ const notice = new Schema(
       type: String,
       default: null,
     },
-    // sex: {
-    //   type: String,
-    //   enum: SEX,
-    //   default: SEX[0],
-    // },
+    sex: {
+      type: String,
+      enum: SEX,
+      default: SEX[0],
+    },
     photoUrl: {
       type: String,
       default: null,
@@ -30,12 +30,20 @@ const notice = new Schema(
       type: String,
       default: null,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   { versionKey: false, timestamps: true }
 );
 
-notice.post("save", mongooseError);
-const Notice = model("pet", pet);
+pet.post("save", mongooseError);
+const Pet = model("pet", pet);
 
-module.exports = Notice;
+module.exports = Pet;
