@@ -48,10 +48,10 @@ const validateUpdateInfo = catchAsync(async (req, _, next) => {
 
   if (!bodyData.length) throw appError(400, "missing fields");
   // if (!bodyData.includes("email")) bodyNoKey.push("email");
-  if (!bodyData.includes("name")) bodyNoKey.push("name");
+  // if (!bodyData.includes("name")) bodyNoKey.push("name");
   if (!bodyData.includes("birthday")) bodyNoKey.push("birthday");
-  if (!bodyData.includes("phone")) bodyNoKey.push("phone");
-  if (!bodyData.includes("city")) bodyNoKey.push("city");
+  if (!bodyData.includes("email")) bodyNoKey.push("email");
+  // if (!bodyData.includes("city")) bodyNoKey.push("city");
 
   if (bodyNoKey.length)
     throw appError(
