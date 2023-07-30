@@ -100,12 +100,13 @@ class UserServuces {
   };
 
   current = async (id) => {
+    console.log(id);
     const user = await User.findById(id).select([
       "-_id",
       "-token",
       "-password",
     ]);
-
+    if (!user) throw appError(404, "Get user info wrong");
     const result = user.toObject();
     result.birthday = moment(result.birthday).format("DD-MM-YYYY");
 

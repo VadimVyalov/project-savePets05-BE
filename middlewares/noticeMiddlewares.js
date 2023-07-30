@@ -85,7 +85,8 @@ class ValidateNotice {
       const skip = (+page - 1) * +limit;
       req.query.pagination = { ...req.query.pagination, skip };
     }
-    if (typeof title !== "undefined") req.query.title = title;
+    if (typeof title !== "undefined")
+      req.query.title = { $regex: title, $options: "i" };
     if (typeof sex !== "undefined") req.query.sex = sex;
     if (typeof category !== "undefined") req.query.category = category;
 

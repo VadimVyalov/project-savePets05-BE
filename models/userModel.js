@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { mongooseError } = require("../utils");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 //  const gravatar = require("gravatar");
@@ -41,6 +42,7 @@ const user = new Schema(
       type: Boolean,
       default: false,
     },
+    favorites: [{ type: Schema.Types.ObjectId, ref: "notice" }],
 
     token: {
       access: {

@@ -1,8 +1,10 @@
 const Notices = require("../models/noticeModel");
+const User = require("../models/userModel");
 const { appError, birthday2age } = require("../utils");
 const CloudinaryService = require("./cloudinaryServices");
 const moment = require("moment");
-
+const { query } = require("express");
+const mongoose = require("mongoose");
 class NoticesService {
   /**
    * add new notice to db
@@ -28,23 +30,9 @@ class NoticesService {
    */
 
   list = async (params) => {
-    const {
-      sex = null,
-      title = null,
-      category = null,
-      birthday = null,
-      pagination = null,
-      userId = null,
-    } = params;
+    const { pagination = null, userId = null, ...query } = params;
 
-    const query = {};
-
-    if (birthday) query.birthday = birthday;
-    if (category) query.category = category;
-    if (title) query.title = { $regex: title, $options: "i" };
-    if (sex) query.sex = sex;
-    query.deleted = false;
-
+    // console.log(query);
     const total = await Notices.find({ ...query });
     if (!total?.length) throw appError(404, "Not found");
 
@@ -61,8 +49,9 @@ class NoticesService {
       return {
         id,
         ...result,
-        follower: e.follower.length,
-        favorite: e.follower.includes(userId),
+        // follower: e.follower.length,
+        // favorite: e.follower.includes(userId),
+        favorite: owner.favorites.some((e) => e.equals(id)),
         age: birthday2age(birthday),
         owner: owner._id.toString() === userId,
       };
@@ -92,8 +81,9 @@ class NoticesService {
       birthday: moment(notice.birthday).format("DD-MM-YYYY"),
       email: owner.email,
       phone: owner.phone,
-      follower: notice.follower.length,
-      favorite: notice.follower.includes(userId),
+      //  follower: notice.follower.length,
+      favorite: owner.favorites.some((e) => e.equals(id)),
+      // favorite: notice.follower.includes(userId),
       owner: owner._id.toString() === userId,
     };
   };
@@ -104,27 +94,39 @@ class NoticesService {
    *
    */
 
-  getByOwner = async (owner) => {
-    const notice = await Notices.find({ owner, deleted: false }).select(
-      "_id category sex birthday location title photoUrl follower"
-    );
+  getByOwner = async (userId, params) => {
+    const { pagination, ...query } = params;
+    query.deleted = false;
+    query.owner = userId;
+
+    const total = await Notices.find({ ...query });
+    if (!total?.length) throw appError(404, "Not found");
+
+    const notice = await Notices.find({ ...query }, null, pagination)
+      .select("_id category sex birthday location title photoUrl follower")
+      .populate("owner", "favorites");
 
     if (!notice) throw appError(404, "Error get notice");
-
+    // console.log(notice);
     const result = notice.map((e) => {
-      const { _id: id, birthday, ...result } = e.toObject();
-
+      const { _id: id, birthday, owner, ...result } = e.toObject();
+      // const { favorites } = owner;
+      // console.log(new mongoose.Types.ObjectId(id));
       return {
         id,
         ...result,
-        follower: e.follower.length,
-        favorite: e.follower.includes(owner),
+        //  follower: e.follower.length,
+        //favorite: e.follower.includes(userId),
+        favorite: owner.favorites.some((e) => e.equals(id)),
+
         age: birthday2age(birthday),
         owner: true,
       };
     });
 
-    return { total: result.length, notice: result };
+    console.log(result);
+
+    return { total: total.length, notice: result };
   };
 
   /**
@@ -191,20 +193,61 @@ class NoticesService {
     return result;
   };
 
+  follow2user = async (noticeId, userId) => {
+    const checkNotice = await Notices.findById(noticeId);
+    if (!checkNotice) throw appError(404, "Error get notice");
+
+    let follow = {};
+    const user = await User.findById(userId);
+
+    if (!user) throw appError(404, "Error get user favorite");
+    const { favorites = [] } = user;
+    follow = { $pull: { favorites: noticeId } };
+    if (!favorites.includes(noticeId))
+      follow = { $push: { favorites: noticeId } };
+
+    const notice = await User.findByIdAndUpdate(userId, follow, {
+      new: true,
+    }).select("-createdAt -updatedAt");
+
+    if (!notice) appError(404, "Error follow user notice");
+
+    const result = {
+      id: noticeId,
+      favorite: notice.favorites.includes(noticeId),
+    };
+
+    return result;
+  };
+
   /**
    * Get favorite notices from db
    * @param {string} userId -  user id
    *
    */
 
-  favorite = async (userId) => {
-    const notice = await Notices.find({
+  favorite = async (userId, params) => {
+    const { pagination } = params;
+    //  const query = {};
+    // query.deleted = false;
+    // query.owner = owner;
+
+    const total = await Notices.find({
       follower: { $elemMatch: { $eq: userId } },
-    })
+    });
+
+    if (!total) throw appError(404, "Favorite not found");
+    const notice = await Notices.find(
+      {
+        follower: { $elemMatch: { $eq: userId } },
+      },
+      null,
+      pagination
+    )
       .select("_id category sex birthday location title photoUrl follower")
       .populate("owner", "_id");
 
-    if (!notice) throw appError(404, "Not found");
+    if (!notice) throw appError(404, "Favorite not found");
 
     const result = notice.map((e) => {
       const { _id: id, owner, birthday, ...result } = e.toObject();
@@ -219,7 +262,45 @@ class NoticesService {
       };
     });
 
-    return { total: result.length, notice: result };
+    return { total: total.length, notice: result };
+  };
+
+  favoriteFromUser = async (userId, params) => {
+    const { pagination, ...query } = params;
+
+    // console.log(query);
+
+    const total = await User.findById(userId).populate({
+      path: "favorites",
+      match: query,
+    });
+
+    if (!total) throw appError(404, "Get favorite wrong");
+
+    const user = await User.findById(userId).populate({
+      path: "favorites",
+      select: "_id category sex birthday location title photoUrl ",
+      match: query,
+      ...pagination,
+    });
+
+    if (!user) throw appError(404, "Get favorite wrong");
+
+    const notice = user.favorites;
+
+    const result = notice.map((e) => {
+      const { _id: id, birthday, ...result } = e.toObject();
+
+      return {
+        id,
+        ...result,
+        //follower: e.follower.length,
+        favorite: true,
+        age: birthday2age(birthday),
+      };
+    });
+
+    return { total: total.favorites.length, notice: result };
   };
 }
 const noticesService = new NoticesService();

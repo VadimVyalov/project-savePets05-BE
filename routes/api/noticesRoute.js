@@ -15,8 +15,18 @@ router.post(
   validateNotice.body,
   noticesController.add
 );
-router.get("/myads", authAccess, noticesController.getByOwner);
-router.get("/favorite", authAccess, noticesController.favorite);
+router.get(
+  "/myads",
+  authAccess,
+  validateNotice.query,
+  noticesController.getByOwner
+);
+router.get(
+  "/favorite",
+  authAccess,
+  validateNotice.query,
+  noticesController.getFavorite
+);
 router.patch(
   "/favorite/:id",
   authAccess,
