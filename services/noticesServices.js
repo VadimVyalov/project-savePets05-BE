@@ -39,7 +39,7 @@ class NoticesService {
     const notice = await Notices.find({ ...query }, null, pagination)
       .sort("-updatedAt")
       .select("_id category sex birthday location title photoUrl follower")
-      .populate("owner", "id");
+      .populate("owner", "id favorites");
 
     if (!notice) throw appError(404, "Error get notice");
 
