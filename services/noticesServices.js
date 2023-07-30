@@ -33,25 +33,31 @@ class NoticesService {
     const { pagination = null, userId = null, ...query } = params;
 
     // console.log(query);
+    const favorites = [];
+    const user = await User.findById(userId);
+    if (userId) if (!user) throw appError(404, "Error get user favorite");
+    if (user?.favorites?.length) favorites.push(...user.favorites);
+
+    console.log(favorites);
     const total = await Notices.find({ ...query });
     if (!total?.length) throw appError(404, "Not found");
 
     const notice = await Notices.find({ ...query }, null, pagination)
       .sort("-updatedAt")
       .select("_id category sex birthday location title photoUrl follower")
-      .populate("owner", "id favorites");
+      .populate("owner", "_id");
 
     if (!notice) throw appError(404, "Error get notice");
 
     const result = notice.map((e) => {
       const { _id: id, birthday, owner, ...result } = e.toObject();
-
+      console.log(owner);
       return {
         id,
         ...result,
         // follower: e.follower.length,
         // favorite: e.follower.includes(userId),
-        favorite: owner.favorites.some((e) => e.equals(id)),
+        favorite: favorites.some((e) => e.equals(id)),
         age: birthday2age(birthday),
         owner: owner._id.toString() === userId,
       };
