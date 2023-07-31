@@ -204,7 +204,7 @@ class NoticesService {
 
     const user = await User.findById(userId).populate({
       path: "favorites",
-      select: "_id category sex birthday location title photoUrl ",
+      select: "_id category sex birthday location title photoUrl deleted ",
       match: query,
       ...pagination,
     });
