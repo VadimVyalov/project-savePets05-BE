@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { noticesController } = require("../../controllers");
 
-const { checkUser, authAccess, validateNotice } = require("../../middlewares");
+const { authUser, validateNotice } = require("../../middlewares");
 
 const router = Router();
 
@@ -10,32 +10,32 @@ const router = Router();
 router.post(
   "/",
 
-  authAccess,
+  authUser.access,
   validateNotice.upload,
   validateNotice.body,
   noticesController.add
 );
 router.get(
   "/myads",
-  authAccess,
+  authUser.access,
   validateNotice.query,
   noticesController.getByOwner
 );
 router.get(
   "/favorite",
-  authAccess,
+  authUser.access,
   validateNotice.query,
   noticesController.getFavorite
 );
 router.patch(
   "/favorite/:id",
-  authAccess,
+  authUser.access,
   validateNotice.checkId,
   noticesController.follow
 );
 router.delete(
   "/:id",
-  authAccess,
+  authUser.access,
   validateNotice.checkId,
   noticesController.remove
 );
@@ -43,20 +43,20 @@ router.delete(
 // === Not autorize
 router.get(
   "/category",
-  checkUser,
+  authUser.check,
   validateNotice.query,
   noticesController.list
 );
 router.get(
   "/categories/:category",
-  checkUser,
+  authUser.check,
   validateNotice.query,
   validateNotice.params,
   noticesController.list
 );
 router.get(
   "/:id",
-  checkUser,
+  authUser.check,
   validateNotice.checkId,
   noticesController.getById
 );

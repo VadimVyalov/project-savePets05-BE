@@ -1,8 +1,14 @@
 const securitySchemes = require("./securitySchemes");
-const schemas = require("./schemas");
+const user = require("./user");
 module.exports = {
   components: {
-    ...schemas,
-    ...securitySchemes,
+    schemas: { ...user },
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
   },
 };

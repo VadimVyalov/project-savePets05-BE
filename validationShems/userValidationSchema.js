@@ -32,7 +32,7 @@ class UserValidationSchema {
   });
 
   info = Joi.object({
-    name: Joi.string().pattern(REGEXP.name.reg).required().messages({
+    name: Joi.string().pattern(REGEXP.name.reg).messages({
       "string.pattern.base": REGEXP.name.mes,
     }),
     email: Joi.string()
@@ -48,9 +48,10 @@ class UserValidationSchema {
     phone: Joi.string().pattern(REGEXP.phone.reg).messages({
       "string.pattern.base": REGEXP.phone.mes,
     }),
-    city: Joi.string().pattern(REGEXP.city.reg).required().messages({
+    city: Joi.string().pattern(REGEXP.city.reg).messages({
       "string.pattern.base": REGEXP.city.mes,
     }),
+    avatarURL: Joi.string().allow(null, ""),
   });
 
   verify = Joi.object({

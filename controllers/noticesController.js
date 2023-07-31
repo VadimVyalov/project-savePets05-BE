@@ -3,24 +3,18 @@ const { catchAsync } = require("../utils");
 
 class NoticesController {
   list = catchAsync(async (req, res) => {
+    const { id: userId = null } = req.user;
     const query = req.query;
-    query.deleted = false;
-    if (req.user) query.userId = req.user.id;
 
-    const result = await noticesService.list(query);
+    const result = await noticesService.list(userId, query);
     res.status(200).json(result);
   });
 
   getByOwner = catchAsync(async (req, res) => {
     const { id: userId } = req.user;
     const query = req.query;
-
     const result = await noticesService.getByOwner(userId, query);
 
-    // query.deleted = false;
-    // query.owner = userId;
-    // query.userId = userId;
-    //const result = await noticesService.list(query);
     res.status(200).json(result);
   });
 
@@ -28,12 +22,7 @@ class NoticesController {
     const { id: userId } = req.user;
     const query = req.query;
 
-    // query.userId = userId;
-    // query.follower = { $elemMatch: { $eq: userId } };
-    //const result = await noticesService.list(query);
-    // const result = await noticesService.favorite(userId, query);
-
-    const result = await noticesService.favoriteFromUser(userId, query);
+    const result = await noticesService.favorite(userId, query);
     res.status(200).json(result);
   });
 
@@ -43,9 +32,9 @@ class NoticesController {
   });
 
   getById = catchAsync(async (req, res) => {
-    const { id } = req.params;
+    const { id: noticeId } = req.params;
     const { id: userId } = req.user;
-    const result = await noticesService.getById(id, userId);
+    const result = await noticesService.getById(noticeId, userId);
     res.status(200).json(result);
   });
 
@@ -65,7 +54,7 @@ class NoticesController {
   follow = catchAsync(async (req, res) => {
     const { id: noticeId } = req.params;
     const { id: userId } = req.user;
-    const result = await noticesService.follow2user(noticeId, userId);
+    const result = await noticesService.follow(noticeId, userId);
 
     res.status(200).json(result);
   });

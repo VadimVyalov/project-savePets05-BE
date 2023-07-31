@@ -50,10 +50,7 @@ const notice = new Schema(
       type: String,
       default: null,
     },
-    follower: {
-      type: Array,
-      default: [],
-    },
+
     deleted: {
       type: Boolean,
       default: false,

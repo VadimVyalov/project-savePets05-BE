@@ -16,10 +16,10 @@ class UserServuces {
     const user = await User.create({ ...body, verificationToken: "qwe" });
 
     token.access = await user.getToken(JWT_ACCESS_SECRET, TOKEN.access);
-    if (!token.access) throw appError(401, "Refresh denied");
+    if (!token.access) throw appError(400, "Access token denied");
 
     token.refresh = await user.getToken(JWT_REFRESH_SECRET, TOKEN.refresh);
-    if (!token.refresh) throw appError(401, "Refresh denied");
+    if (!token.refresh) throw appError(400, "Refresh token denied");
 
     const { name, email, id } = user;
     //console.log(token);
@@ -101,11 +101,9 @@ class UserServuces {
 
   current = async (id) => {
     console.log(id);
-    const user = await User.findById(id).select([
-      "-_id",
-      "-token",
-      "-password",
-    ]);
+    const user = await User.findById(id).select(
+      "-_id email name birthday phone city avatarURL"
+    );
     if (!user) throw appError(404, "Get user info wrong");
     const result = user.toObject();
     result.birthday = moment(result.birthday).format("DD-MM-YYYY");

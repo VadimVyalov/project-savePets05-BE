@@ -43,7 +43,6 @@ class PetService {
 
     query.deleted = false;
     query.owner = userId;
-    // console.log(query);
 
     const total = await Pet.find({ ...query });
 
@@ -51,11 +50,12 @@ class PetService {
 
     const pet = await Pet.find({ ...query }, null, pagination)
       .sort("-updatedAt")
-      .select("_id   birthday location  photoUrl name");
+      .select("_id   birthday location  photoUrl name comments type");
 
     if (!pet) throw appError(404, "Error get pet");
 
     result.total = total.length;
+
     result.pet = pet.map((e) => {
       const { _id: id, ...result } = e.toObject();
       return {

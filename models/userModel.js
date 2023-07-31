@@ -59,12 +59,6 @@ const user = new Schema(
       type: String,
       required: [true, "Verify token is required"],
     },
-    // pets: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "pet",
-    //   },
-    // ],
   },
   { versionKey: false }
 );

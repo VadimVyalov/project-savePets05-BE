@@ -1,6 +1,6 @@
 module.exports = {
   securitySchemes: {
-    Bearer: {
+    bearerAuth: {
       type: "http",
       scheme: "bearer",
       bearerFormat: "JWT",
