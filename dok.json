@@ -1,0 +1,623 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "version": "2.0.2",
+      "title": "Petly Project",
+      "description": "Team project documentation",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+  
+  
+  "servers": [{ "url": "https://project-savepets05-be.onrender.com" }],
+    "tags": [
+       {
+        "name": "User",
+        "description": "User endpoints"
+      }
+    ],
+  
+    "paths": {
+      "/api/users/register": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Register",
+          "description": "Register",
+          "operationId": "register",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationRequest"
+                },
+                "example": {
+                  "email": "test01@mail.com",
+                  "name": "Test01",
+                  "password": "A123456a"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Registration Successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RegistrationResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Registration denied)",
+              "content": {}
+            },
+            "409": {
+              "description": "Email in use...",
+              "content": {}
+            },
+            "500": {
+              "description": "Server error",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/api/users/login": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Login user",
+          "description": "Login",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "test01@mail.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "A123456a"
+                    }
+                  }
+                },
+                "example": {
+                  "email": "test01@mail.com",
+                  "password": "A123456a"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Login Successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LoginResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Email or password is wrong",
+              "content": {}
+            },
+            "500": {
+              "description": "Server error",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/api/users/refresh": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Refresh token",
+          "description": "Refresh",
+          "parameters": [],
+          "security": [
+            {
+              "BearerR": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Refresh token successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RefreshResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Email or password is wrong",
+              "content": {}
+            },
+            "500": {
+              "description": "Server error",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/api/users/logout": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Logout",
+          "description": "Logout",
+          "operationId": "logout",
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/api/users/current": {
+        "get": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Current",
+          "description": "Current",
+          "operationId": "current",
+                  "security": [
+            {
+              "BearerA": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/api/users/info": {
+        "patch": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Info",
+          "description": "Info",
+          "operationId": "info",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "birthday": {
+                      "type": "string",
+                      "example": "10-10-2020"
+                    },
+                    "city": {
+                      "type": "string",
+                      "example": "Ukraine"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "test01@mail.com"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Test01"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "+380667778899"
+                    }
+                  }
+                },
+                "example": {
+                  "birthday": "10-10-2020",
+                  "city": "Ukraine",
+                  "email": "test01@mail.com",
+                  "name": "Test01",
+                  "phone": "+380667778899"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/api/users/avatars": {
+        "patch": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Avatar",
+          "description": "Avatar",
+          "operationId": "avatar",
+          "requestBody": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "avatar": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
+      },    "/api/notices": {
+        "post": {
+          "tags": [
+            "default"
+          ],
+          "summary": "Add notice",
+          "requestBody": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "new notice1"
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "sell"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Jac"
+                    },
+                    "birthday": {
+                      "type": "string",
+                      "example": "30-10-2020"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "qwe"
+                    },
+                    "sex": {
+                      "type": "string",
+                      "example": "male"
+                    },
+                    "location": {
+                      "type": "string",
+                      "example": "Kharkiv"
+                    },
+                    "price": {
+                      "type": "integer",
+                      "example": "100"
+                    },
+                    "comments": {
+                      "type": "string",
+                      "example": "dfghjkl; kjhgfds"
+                    },
+                    "notice": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/api/notices/categories/sell": {
+        "get": {
+          "tags": [
+            "default"
+          ],
+          "summary": "List notices by category",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/api/notices/64c084f3ddf5cee42947551f": {
+        "get": {
+          "tags": [
+            "default"
+          ],
+          "summary": "Get notice by Id",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "default"
+          ],
+          "summary": "Delete notice",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/api/notices/myads": {
+        "get": {
+          "tags": [
+            "default"
+          ],
+          "summary": "List my notice",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/api/notices/favorite": {
+        "get": {
+          "tags": [
+            "default"
+          ],
+          "summary": "List favorite notice",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/api/notices/favorite/64c084f3ddf5cee42947551f": {
+        "patch": {
+          "tags": [
+            "default"
+          ],
+          "summary": "Follow notice",
+          "requestBody": {
+            "content": {}
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "RegistrationRequest": {
+          "type": "object",
+          "required": [
+            "email",
+            "password"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "User's name",
+              "example": "User"
+            },
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "example": "user@mail.com"
+            },
+            "password": {
+              "type": "string",
+              "description": "User's password",
+              "example": "A123456a"
+            }
+          }
+        },
+        "RegistrationResponse": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "User name",
+                  "example": "Test01"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User email",
+                  "example": "test01@mail.com"
+                }
+              }
+            },
+            "token": {
+              "type": "object",
+              "properties": {
+                "access": {
+                  "type": "string",
+                  "description": "access token",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzYyNjA1fQ.gyAgBYmlTdp9cVSa3oMwatrOrSv6aZwUUbqdZHXAVMA"
+                },
+                "refresh": {
+                  "type": "string",
+                  "description": "refresh token",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzY1NjA1fQ.uK3wpExqevXtwZlkbt4VicYWuWz9lXYF6CrhNQhnowE"
+                }
+              }
+            }
+          }
+        },
+        "LoginRequest": {
+          "type": "object",
+          "required": [
+            "email",
+            "password"
+          ],
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User email",
+              "example": "user@mail.com"
+            },
+            "password": {
+              "type": "string",
+              "description": "User password",
+              "example": "A123456a"
+            }
+          }
+        },
+        "LoginResponse": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "User name",
+                  "example": "Test01"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User email",
+                  "example": "test01@mail.com"
+                }
+              },
+              "token": {
+                "type": "object",
+                "properties": {
+                  "access": {
+                    "type": "string",
+                    "description": "access token",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzYyNjA1fQ.gyAgBYmlTdp9cVSa3oMwatrOrSv6aZwUUbqdZHXAVMA"
+                  },
+                  "refresh": {
+                    "type": "string",
+                    "description": "refresh token",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzY1NjA1fQ.uK3wpExqevXtwZlkbt4VicYWuWz9lXYF6CrhNQhnowE"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "RefreshResponse": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "object",
+              "properties": {
+                "access": {
+                  "type": "string",
+                  "description": "access token",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzYyNjA1fQ.gyAgBYmlTdp9cVSa3oMwatrOrSv6aZwUUbqdZHXAVMA"
+                },
+                "refresh": {
+                  "type": "string",
+                  "description": "refresh token",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzY1NjA1fQ.uK3wpExqevXtwZlkbt4VicYWuWz9lXYF6CrhNQhnowE"
+                }
+              }
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "BearerA": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },      "BearerR": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }

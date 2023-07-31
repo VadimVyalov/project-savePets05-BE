@@ -50,7 +50,7 @@ const NOTISE_BODY = [
   "location",
 ];
 
-const PET_BODY = ["name", "birthday", "type", "location"];
+const PET_BODY = ["name", "birthday", "type"];
 
 const CATEGORY = ["sell", "lost-found", "for-free"];
 const SEX = ["male", "female"];
