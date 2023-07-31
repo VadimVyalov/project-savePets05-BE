@@ -27,7 +27,7 @@ const REGEXP = {
     mes: "Field 'city' must contain minimum 2 characters, maximum 32, only unicode letter and first leter uppercase",
   },
   title: {
-    reg: /^[\p{Ll}' `\d]{1,31}$/u,
+    reg: /^[\p{L}' `\d]{1,31}$/u,
     mes: "Field 'title' must contain minimum 2 characters, maximum 32, only unicode letter and digit ",
   },
   type: {

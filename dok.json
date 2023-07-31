@@ -16,6 +16,9 @@
        {
         "name": "User",
         "description": "User endpoints"
+      },       {
+        "name": "Notice",
+        "description": "Notice endpoints"
       }
     ],
   
@@ -272,10 +275,11 @@
             }
           }
         }
-      },    "/api/notices": {
+      },
+      "/api/notices": {
         "post": {
           "tags": [
-            "default"
+            "Notice"
           ],
           "summary": "Add notice",
           "requestBody": {
@@ -344,10 +348,10 @@
           }
         }
       },
-      "/api/notices/categories/sell": {
+      "/api/notices/categories": {
         "get": {
           "tags": [
-            "default"
+            "Notice"
           ],
           "summary": "List notices by category",
           "security": [
@@ -365,12 +369,21 @@
           }
         }
       },
-      "/api/notices/64c084f3ddf5cee42947551f": {
+      "/api/notices/{id}": {
         "get": {
           "tags": [
-            "default"
+            "Notice"
           ],
           "summary": "Get notice by Id",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "type": "string",
+              "description": "Get notice by id"
+              }
+          ],
           "security": [
             {
               "bearerAuth": []
@@ -387,9 +400,18 @@
         },
         "delete": {
           "tags": [
-            "default"
+            "Notice"
           ],
           "summary": "Delete notice",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "type": "string",
+              "description": "Delete notice by id"
+              }
+          ],
           "security": [
             {
               "bearerAuth": []
@@ -408,7 +430,7 @@
       "/api/notices/myads": {
         "get": {
           "tags": [
-            "default"
+            "Notice"
           ],
           "summary": "List my notice",
           "security": [
@@ -429,7 +451,7 @@
       "/api/notices/favorite": {
         "get": {
           "tags": [
-            "default"
+            "Notice"
           ],
           "summary": "List favorite notice",
           "security": [
@@ -450,7 +472,7 @@
       "/api/notices/favorite/64c084f3ddf5cee42947551f": {
         "patch": {
           "tags": [
-            "default"
+            "Notice"
           ],
           "summary": "Follow notice",
           "requestBody": {
