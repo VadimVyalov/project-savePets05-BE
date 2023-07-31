@@ -41,7 +41,6 @@ class UserController {
   current = async (req, res) => {
     const { id } = req.user;
     const user = await userService.current(id);
-    // console.log(user);
     res.status(200).json(user);
   };
 

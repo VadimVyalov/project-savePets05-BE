@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { petsController } = require("../../controllers");
 
-const { authAccess, validatePet, authUser } = require("../../middlewares");
+const { authUser, validatePet } = require("../../middlewares");
 
 const router = Router();
 
@@ -9,12 +9,17 @@ const router = Router();
 
 router.post(
   "/",
-  authAccess,
+  authUser.access,
   validatePet.upload,
   validatePet.body,
   petsController.add
 );
-router.get("/", authUser, validatePet.query, petsController.list);
-router.delete("/:id", authAccess, validatePet.checkId, petsController.remove);
+router.get("/", authUser.info, validatePet.query, petsController.list);
+router.delete(
+  "/:id",
+  authUser.access,
+  validatePet.checkId,
+  petsController.remove
+);
 
 module.exports = router;

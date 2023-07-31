@@ -26,25 +26,6 @@ const jwtAccesStrategy = new Strategy(
   jwtVerify
 );
 
-const authAccess = catchAsync(async (req, res, next) => {
-  const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-
-  passport.authenticate(
-    jwtAccesStrategy,
-    { session: false },
-    (err, user, info) => {
-      if (err || info || user?.token?.access !== token || !user?.token?.refresh)
-        return next(appError(401, "Not authorized"));
-      const { id } = user;
-      req.user = { id };
-
-      next();
-    }
-  )(req, res, next);
-});
-
-//  =============
-
 const jwtRefreshStrategy = new Strategy(
   {
     secretOrKey: JWT_REFRESH_SECRET,
@@ -53,62 +34,95 @@ const jwtRefreshStrategy = new Strategy(
   jwtVerify
 );
 
-const authRefresh = catchAsync(async (req, res, next) => {
-  const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-
-  passport.authenticate(
-    jwtRefreshStrategy,
-    { session: false },
-    (err, user, info) => {
-      if (err || info || user?.token?.refresh !== token || !user?.token?.access)
-        return next(appError(401, "Not authorized"));
-      const { id } = user;
-      req.user = { id };
-
-      next();
-    }
-  )(req, res, next);
-});
-
 //  ==============
+class AuthUser {
+  access = catchAsync(async (req, res, next) => {
+    const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
 
-const checkUser = catchAsync(async (req, res, next) => {
-  const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+    passport.authenticate(
+      jwtAccesStrategy,
+      { session: false },
+      (err, user, info) => {
+        if (
+          err ||
+          info ||
+          user?.token?.access !== token ||
+          !user?.token?.refresh
+        )
+          return next(appError(401, "Not authorized"));
+        const { id } = user;
+        req.user = { id };
 
-  passport.authenticate(
-    jwtAccesStrategy,
-    { session: false },
-    (err, user, info) => {
-      if (err || info || user?.token?.access !== token || !user?.token?.refresh)
-        req.user = { id: null };
-      else req.user = { id: user.id };
+        next();
+      }
+    )(req, res, next);
+  });
 
-      next();
-    }
-  )(req, res, next);
-});
+  refresh = catchAsync(async (req, res, next) => {
+    const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
 
-const authUser = catchAsync(async (req, res, next) => {
-  const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+    passport.authenticate(
+      jwtRefreshStrategy,
+      { session: false },
+      (err, user, info) => {
+        if (
+          err ||
+          info ||
+          user?.token?.refresh !== token ||
+          !user?.token?.access
+        )
+          return next(appError(401, "Not authorized"));
+        const { id } = user;
+        req.user = { id };
 
-  passport.authenticate(
-    jwtAccesStrategy,
-    { session: false },
-    (err, user, info) => {
-      if (err || info || user?.token?.access !== token || !user?.token?.refresh)
-        return next(appError(401, "Not authorized"));
+        next();
+      }
+    )(req, res, next);
+  });
 
-      const { _id, email, name, birthday, phone, city, avatarURL } = user;
-      req.user = { id: _id, email, name, birthday, phone, city, avatarURL };
+  check = catchAsync(async (req, res, next) => {
+    const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
 
-      next();
-    }
-  )(req, res, next);
-});
+    passport.authenticate(
+      jwtAccesStrategy,
+      { session: false },
+      (err, user, info) => {
+        if (
+          err ||
+          info ||
+          user?.token?.access !== token ||
+          !user?.token?.refresh
+        )
+          req.user = { id: null };
+        else req.user = { id: user.id };
 
-module.exports = {
-  authAccess,
-  authRefresh,
-  checkUser,
-  authUser,
-};
+        next();
+      }
+    )(req, res, next);
+  });
+
+  info = catchAsync(async (req, res, next) => {
+    const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+
+    passport.authenticate(
+      jwtAccesStrategy,
+      { session: false },
+      (err, user, info) => {
+        if (
+          err ||
+          info ||
+          user?.token?.access !== token ||
+          !user?.token?.refresh
+        )
+          return next(appError(401, "Not authorized"));
+
+        const { _id, email, name, birthday, phone, city, avatarURL } = user;
+        req.user = { id: _id, email, name, birthday, phone, city, avatarURL };
+
+        next();
+      }
+    )(req, res, next);
+  });
+}
+const authUser = new AuthUser();
+module.exports = authUser;

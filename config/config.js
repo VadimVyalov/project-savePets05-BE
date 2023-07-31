@@ -1,6 +1,6 @@
 const TOKEN = {
-  access: "3000s",
-  refresh: "6000s",
+  access: "24h",
+  refresh: "24h",
 };
 
 const REGEXP = {
