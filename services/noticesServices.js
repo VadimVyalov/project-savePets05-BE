@@ -83,7 +83,7 @@ class NoticesService {
       birthday: moment(notice.birthday).format("DD-MM-YYYY"),
       email: owner.email,
       phone: owner.phone,
-      favorite: owner.favorites.some((e) => e.equals(id)),
+      favorite: owner.favorites?.some((e) => e.equals(id)),
       owner: owner._id.toString() === userId,
     };
   };
@@ -100,7 +100,7 @@ class NoticesService {
     query.owner = userId;
 
     const total = await Notices.find({ ...query });
-    if (!total?.length) throw appError(404, "Not found");
+    if (!total) throw appError(404, "Not found");
 
     const notice = await Notices.find({ ...query }, null, pagination)
       .select("_id category sex birthday location title photoUrl follower")
