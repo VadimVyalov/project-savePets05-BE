@@ -18,9 +18,9 @@ class PetValidationSchema {
     //   .messages({
     //     "any.only": `Field 'sex' must be on of the [ ${SEX} ]`,
     //   }),
-    location: Joi.string().pattern(REGEXP.location.reg).required().messages({
-      "string.pattern.base": REGEXP.location.mes,
-    }),
+    // location: Joi.string().pattern(REGEXP.location.reg).required().messages({
+    //   "string.pattern.base": REGEXP.location.mes,
+    // }),
     comments: Joi.string().min(1).max(120),
   });
 }
