@@ -1,9 +1,9 @@
 {
     "openapi": "3.0.3",
     "info": {
-      "version": "2.0.2",
-      "title": "Petly Project",
-      "description": "Team project documentation",
+      "version": "1.2.3",
+      "title": "Save Pets",
+      "description": "Team project-5 documentation",
       "license": {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
@@ -15,10 +15,15 @@
     "tags": [
        {
         "name": "User",
-        "description": "User endpoints"
-      },       {
+        "description": "Users endpoints"
+      }, 
+      {
         "name": "Notice",
-        "description": "Notice endpoints"
+        "description": "Notices endpoints"
+      }, 
+      {
+        "name": "Pet",
+        "description": "Pets endpoints"
       }
     ],
   
@@ -152,9 +157,7 @@
       },
       "/api/users/current": {
         "get": {
-          "tags": [
-            "User"
-          ],
+          "tags": [ "User" ],
           "summary": "Current",
           "description": "Get user info",
           "security": [{"BearerA": []}],
@@ -347,6 +350,71 @@
               "bearerAuth": []
             }
           ],
+          "parameters": [
+            {
+              "name": "limit",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Number notices in response",
+              "example": "1"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Pagination page",
+              "example": "1"
+            },
+            {
+              "name": "title",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Notice title",
+              "example": "de"
+            },
+            {
+              "name": "category",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Category  [\"sell\", \"lost-found\", \"for-free\"]",
+              "example": "lost-found"
+            },
+            {
+              "name": "startAge",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Age (monts)",
+              "example": "25"
+            },
+            {
+              "name": "endAge",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Age (monts)",
+              "example": "35"
+            },
+            {
+              "name": "sex",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Sex [\"male\", \"female\"]",
+              "example": "male"
+            }
+          ],
           "responses": {
             "200": {
               "description": "Successful response",
@@ -421,9 +489,70 @@
             "Notice"
           ],
           "summary": "List my notice",
-          "security": [
+          "security": [{"bearerAuth": []}],
+          "parameters": [
             {
-              "bearerAuth": []
+              "name": "limit",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Number notices in response",
+              "example": "1"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Pagination page",
+              "example": "1"
+            },
+            {
+              "name": "title",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Notice title",
+              "example": "de"
+            },
+            {
+              "name": "category",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Category  [\"sell\", \"lost-found\", \"for-free\"]",
+              "example": "lost-found"
+            },
+            {
+              "name": "startAge",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Age (monts)",
+              "example": "25"
+            },
+            {
+              "name": "endAge",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Age (monts)",
+              "example": "35"
+            },
+            {
+              "name": "sex",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Sex [\"male\", \"female\"]",
+              "example": "male"
             }
           ],
           "responses": {
@@ -438,10 +567,100 @@
       },
       "/api/notices/favorite": {
         "get": {
-          "tags": [
-            "Notice"
-          ],
+          "tags": ["Notice"],
           "summary": "List favorite notice",
+          "security": [{"bearerAuth": []}],
+          "parameters": [
+            {
+              "name": "limit",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Number notices in response",
+              "example": "1"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Pagination page",
+              "example": "1"
+            },
+            {
+              "name": "title",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Notice title",
+              "example": "de"
+            },
+            {
+              "name": "category",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Category  [\"sell\", \"lost-found\", \"for-free\"]",
+              "example": "lost-found"
+            },
+            {
+              "name": "startAge",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Age (monts)",
+              "example": "25"
+            },
+            {
+              "name": "endAge",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Age (monts)",
+              "example": "35"
+            },
+            {
+              "name": "sex",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Sex [\"male\", \"female\"]",
+              "example": "male"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/api/notices/favorite/{id}": {
+        "patch": {
+          "tags": ["Notice"],
+          "summary": "Follow notice",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "type": "string",
+              "description": "Get notice by id"
+              }
+          ],
+          "requestBody": {
+            "content": {}
+          },
           "security": [
             {
               "bearerAuth": []
@@ -457,20 +676,117 @@
           }
         }
       },
-      "/api/notices/favorite/64c084f3ddf5cee42947551f": {
-        "patch": {
+      "/api/pet": {
+        "post": {
           "tags": [
-            "Notice"
+            "Pet"
           ],
-          "summary": "Follow notice",
+          "summary": "Add pet",
           "requestBody": {
-            "content": {}
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Jac"
+                    },
+                    "birthday": {
+                      "type": "string",
+                      "example": "30-10-2020"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "qwe"
+                    },
+                    "sex": {
+                      "type": "string",
+                      "example": "male"
+                    },
+                    "location": {
+                      "type": "string",
+                      "example": "Kharkiv"
+                    },
+                    "comments": {
+                      "type": "string",
+                      "example": "dfghjkl; kjhgfds"
+                    },
+                    "pet": {
+                      "type": "string",
+                      "format": "binary"
+                    },
+                    "title": {
+                      "type": "integer",
+                      "example": "1111"
+                    },
+                    "rrrrr": {
+                      "type": "string",
+                      "example": "rrrr"
+                    }
+                  }
+                }
+              }
+            }
           },
-          "security": [
+          "security": [{"BearerA": []}],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        },
+        "get": {
+          "tags": ["Pet"],
+          "summary": "List my pet",
+          "security": [{"BearerA": []}],
+          "parameters": [
             {
-              "bearerAuth": []
+              "name": "limit",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Number notices in response",
+              "example": "1"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Pagination page",
+              "example": "1"
             }
           ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/api/pet/{id}": {
+        "delete": {
+          "tags": ["Pet"],
+          "summary": "Delete pet",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "type": "string",
+              "description": "Get notice by id"
+              }
+          ],
+          "security": [{"BearerA": []}],
           "responses": {
             "200": {
               "description": "Successful response",
@@ -669,31 +985,6 @@
            }
          },
          "InfoRequest":{
-          "type": "object",
-                  "properties": {
-                    "birthday": {
-                      "type": "string",
-                      "example": "10-10-2020"
-                    },
-                    "city": {
-                      "type": "string",
-                      "example": "Ukraine"
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": "test01@mail.com"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "Test01"
-                    },
-                    "phone": {
-                      "type": "string",
-                      "example": "+380667778899"
-                    }
-                  }
-         },
-          "InfoRequest":{
           "type": "object",
                   "properties": {
                     "birthday": {

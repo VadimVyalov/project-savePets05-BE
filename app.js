@@ -2,9 +2,8 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
- //const swagger = require("./swagger");
-//const swagger = require("./docs");
-const swagger = require("./dok");
+
+const docs = require("./docs");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./.env" });
 //console.log(swagger)
@@ -24,7 +23,7 @@ app.use(express.static("public"));
 app.use("/api/notices", noticeRouter);
 app.use("/api/users", userRouter);
 app.use("/api/pet", petRouter);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(docs));
 
 // console.log(process.env.SERVER_URL);
 app.all("*", (_, res) => {
