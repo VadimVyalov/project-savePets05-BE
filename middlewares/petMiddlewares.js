@@ -16,7 +16,7 @@ class ValidatePet {
 
 
     if (bodyNoKey.length)
-      //price
+    
       throw appError(
         400,
         `missing field${bodyNoKey.length > 1 ? "s" : ""}: ${bodyNoKey}`
