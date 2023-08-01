@@ -21,7 +21,7 @@ class PetValidationSchema {
     // location: Joi.string().pattern(REGEXP.location.reg).required().messages({
     //   "string.pattern.base": REGEXP.location.mes,
     // }),
-    comments: Joi.string().min(1).max(120),
+    comments: Joi.string().allow(null, "").min(1).max(120),
   });
 }
 const petValidationSchema = new PetValidationSchema();
