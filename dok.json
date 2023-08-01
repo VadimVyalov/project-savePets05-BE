@@ -25,12 +25,9 @@
     "paths": {
       "/api/users/register": {
         "post": {
-          "tags": [
-            "User"
-          ],
+          "tags": ["User"],
           "summary": "Register",
           "description": "Register",
-          "operationId": "register",
           "requestBody": {
             "content": {
               "application/json": {
@@ -56,18 +53,9 @@
                 }
               }
             },
-            "400": {
-              "description": "Registration denied)",
-              "content": {}
-            },
-            "409": {
-              "description": "Email in use...",
-              "content": {}
-            },
-            "500": {
-              "description": "Server error",
-              "content": {}
-            }
+            "400": {"description": "Registration denied"},
+            "409": {"description": "Email in use..."},
+            "500": {"description": "Server error"}
           }
         }
       },
@@ -112,14 +100,8 @@
                 }
               }
             },
-            "401": {
-              "description": "Email or password is wrong",
-              "content": {}
-            },
-            "500": {
-              "description": "Server error",
-              "content": {}
-            }
+            "401": { "description": "Email or password is wrong"},
+            "500": {"description": "Server error"}
           }
         }
       },
@@ -147,15 +129,10 @@
                 }
               }
             },
-            "401": {
-              "description": "Email or password is wrong",
-              "content": {}
-            },
-            "500": {
-              "description": "Server error",
-              "content": {}
-            }
+            "401": {"description": " Not authorized"},
+            "500": {"description": "Server error"}
           }
+
         }
       },
       "/api/users/logout": {
@@ -165,13 +142,13 @@
           ],
           "summary": "Logout",
           "description": "Logout",
-          "operationId": "logout",
+          "security": [{"BearerA": []}],
           "responses": {
-            "200": {
-              "description": ""
-            }
+            "204": {"description": "Logout  successful"},
+            "401": {"description": " Not authorized" },
+            "500": {"description": "Server error"}
           }
-        }
+          }
       },
       "/api/users/current": {
         "get": {
@@ -179,17 +156,21 @@
             "User"
           ],
           "summary": "Current",
-          "description": "Current",
-          "operationId": "current",
-                  "security": [
-            {
-              "BearerA": []
-            }
-          ],
+          "description": "Get user info",
+          "security": [{"BearerA": []}],
           "responses": {
             "200": {
-              "description": ""
-            }
+              "description": "Get user info successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CurrentResponse"
+                  }
+                }
+              }
+            },
+            "401": {"description": " Not authorized"},
+            "500": {"description": "Server error"}
           }
         }
       },
@@ -199,35 +180,13 @@
             "User"
           ],
           "summary": "Info",
-          "description": "Info",
-          "operationId": "info",
+          "description": "Update user info ",          
+          "security": [{"BearerA": []}],
           "requestBody": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "birthday": {
-                      "type": "string",
-                      "example": "10-10-2020"
-                    },
-                    "city": {
-                      "type": "string",
-                      "example": "Ukraine"
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": "test01@mail.com"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "Test01"
-                    },
-                    "phone": {
-                      "type": "string",
-                      "example": "+380667778899"
-                    }
-                  }
+                  "$ref": "#/components/schemas/InfoRequest"
                 },
                 "example": {
                   "birthday": "10-10-2020",
@@ -241,19 +200,32 @@
           },
           "responses": {
             "200": {
-              "description": ""
-            }
+              "description": "Update user info successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties":{
+                    "message": {
+                      "type": "string",
+                      "example": "User info succesfull updated"
+                    }
+                  }
+                  }
+                }
+              }
+            },
+            "401": {"description": " Not authorized"},
+            "500": {"description": "Server error"}
           }
         }
       },
       "/api/users/avatars": {
         "patch": {
-          "tags": [
-            "User"
-          ],
+          "tags": ["User"],
           "summary": "Avatar",
-          "description": "Avatar",
-          "operationId": "avatar",
+          "description": "Update user avatar ",
+          "security": [{"BearerA": []}],
           "requestBody": {
             "content": {
               "multipart/form-data": {
@@ -271,8 +243,24 @@
           },
           "responses": {
             "200": {
-              "description": ""
-            }
+              "description": "Update user avatar successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties":{
+                    "avatarURL": {
+                      "type": "string",
+                      "example": "v1690859464/avatars/qdzn7idpzuhd2rtkkyav.jpg"
+                    }
+                  }
+                  }
+                }
+              }
+            },
+            "400": {"description": "Wrong upload images ..."},
+            "401": {"description": "Not authorized"},
+            "500": {"description": "Server error"}
           }
         }
       },
@@ -496,6 +484,17 @@
     },
     "components": {
       "schemas": {
+        "NotAuthorized":{
+          "type": "object",
+          "properties":{
+          "message": {
+            "type": "string",
+            "description": "Not authorized",
+            "example": "Not authorized"
+          }
+        }
+        },
+        
         "RegistrationRequest": {
           "type": "object",
           "required": [
@@ -565,7 +564,7 @@
             "email": {
               "type": "string",
               "description": "User email",
-              "example": "user@mail.com"
+              "example": "test01@mail.com"
             },
             "password": {
               "type": "string",
@@ -590,20 +589,20 @@
                   "description": "User email",
                   "example": "test01@mail.com"
                 }
-              },
-              "token": {
-                "type": "object",
-                "properties": {
-                  "access": {
-                    "type": "string",
-                    "description": "access token",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzYyNjA1fQ.gyAgBYmlTdp9cVSa3oMwatrOrSv6aZwUUbqdZHXAVMA"
-                  },
-                  "refresh": {
-                    "type": "string",
-                    "description": "refresh token",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzY1NjA1fQ.uK3wpExqevXtwZlkbt4VicYWuWz9lXYF6CrhNQhnowE"
-                  }
+              }
+            },
+            "token": {
+              "type": "object",
+              "properties": {
+                "access": {
+                  "type": "string",
+                  "description": "access token",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzYyNjA1fQ.gyAgBYmlTdp9cVSa3oMwatrOrSv6aZwUUbqdZHXAVMA"
+                },
+                "refresh": {
+                  "type": "string",
+                  "description": "refresh token",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzZmMWI1MDdlNzkzNjBkNWY0ZGMwOCIsImlhdCI6MTY5MDc1OTYwNSwiZXhwIjoxNjkwNzY1NjA1fQ.uK3wpExqevXtwZlkbt4VicYWuWz9lXYF6CrhNQhnowE"
                 }
               }
             }
@@ -628,8 +627,98 @@
               }
             }
           }
-        }
-      },
+        },
+        "CurrentResponse": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "User name",
+                  "example": "Test01"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User email",
+                  "example": "test01@mail.com"
+                },
+                "birthday": {
+                  "type": "string",
+                  "description": "User birthday",
+                  "example": "30-10-1980"
+                },
+                "phone":  {
+                  "type": "string",
+                  "description": "User phone",
+                  "example": "+380667778899"
+                },
+                "city":  {
+                  "type": "string",
+                  "description": "User city",
+                  "example": "Kharkiv"
+                },
+                "avatarURL":  {
+                  "type": "string",
+                  "description": "User avatar",
+                  "example": "v1690339589/avatars/m55p4t9joavvba8okhiy.jpg"
+                }
+              }
+            }
+           }
+         },
+         "InfoRequest":{
+          "type": "object",
+                  "properties": {
+                    "birthday": {
+                      "type": "string",
+                      "example": "10-10-2020"
+                    },
+                    "city": {
+                      "type": "string",
+                      "example": "Ukraine"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "test01@mail.com"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Test01"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "+380667778899"
+                    }
+                  }
+         },
+          "InfoRequest":{
+          "type": "object",
+                  "properties": {
+                    "birthday": {
+                      "type": "string",
+                      "example": "10-10-2020"
+                    },
+                    "city": {
+                      "type": "string",
+                      "example": "Ukraine"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "test01@mail.com"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Test01"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "+380667778899"
+                    }
+                  }
+         }
+        },
       "securitySchemes": {
         "BearerA": {
           "type": "http",

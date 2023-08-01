@@ -55,7 +55,7 @@ class AuthUser {
 
         next();
       }
-    )(req, res, next);
+    )(req, res);
   });
 
   refresh = catchAsync(async (req, res, next) => {
