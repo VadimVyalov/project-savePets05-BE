@@ -20,9 +20,10 @@ class Auth {
   if (!user || user?.token?.access !== token ||
     !user?.token?.refresh)
     throw appError(401, "Not authorized");
+  req.user = { id };  
     user.token.access = undefined;
     user.token.refresh = undefined;
-  req.user = { id };
+  
   next();
 });
 
@@ -67,7 +68,7 @@ check = catchAsync(async (req, _, next) => {
 
       user.token.access = undefined;
       user.token.refresh = undefined;
- // req.user = { id };
+ 
   next();
 });
 
@@ -83,7 +84,7 @@ info = catchAsync(async (req, _, next) => {
     return decoded.id;
   });
 
-  const user = await User.findById(id).select(["token"]);
+  const user = await User.findById(id);
 
   if (!user || user?.token?.access !== token ||
     !user?.token?.refresh)
@@ -94,7 +95,7 @@ info = catchAsync(async (req, _, next) => {
 
   user.token.access = undefined;
   user.token.refresh = undefined;
-  req.user = { id };
+ 
   next();
 });
 
