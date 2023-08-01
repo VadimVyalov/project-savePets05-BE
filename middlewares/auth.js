@@ -52,25 +52,26 @@ check = catchAsync(async (req, _, next) => {
   const { JWT_ACCESS_SECRET } = process.env;
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ") || "";
- 
+  req.user = { id: null }
+
+  if (bearer !== "Bearer") return next();
   
-
-  if (bearer !== "Bearer") req.user = { id: null } ;//throw appError(401, "Not authorized -C1-");
-
   const id = jwt.verify(token, JWT_ACCESS_SECRET, (err, decoded) => {
     if (err) return null;
     return decoded.id;
   });
 
-  const user = await User.findById(id).select(["token"]);
+  if (!id) return next();
+   const user = await User.findById(id).select(["token"]);
 
   if (!user || user?.token?.access !== token ||!user?.token?.refresh)
-    req.user = { id: null }
-      else req.user = { id };
+  return next();
+    
+   req.user = { id };
 
       user.token.access = undefined;
       user.token.refresh = undefined;
- 
+  
   next();
 });
 
