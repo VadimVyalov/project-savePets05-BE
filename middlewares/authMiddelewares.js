@@ -93,7 +93,7 @@ class AuthUser {
           user?.token?.access !== token ||
           !user?.token?.refresh
         )
-          req.user = { id: null };
+          req.user = { id: null }
         else req.user = { id: user.id };
 
         next();
