@@ -54,6 +54,7 @@ router.get(
   validateNotice.params,
   noticesController.list
 );
+router.get("/undelete",noticesController.unDelete)
 router.get(
   "/:id",
   authUser.check,

@@ -50,7 +50,7 @@ class PetService {
 
     const pet = await Pet.find({ ...query }, null, pagination)
       .sort("-updatedAt")
-      .select("_id   birthday location  photoUrl name comments type");
+      .select("_id birthday location photoUrl name comments type");
 
     if (!pet) throw appError(404, "Error get pet");
 
@@ -58,10 +58,11 @@ class PetService {
 
     result.pet = pet.map((e) => {
       const { _id: id, ...result } = e.toObject();
+ 
       return {
         id,
         ...result,
-        birthday: moment(pet.birthday).format("DD-MM-YYYY"),
+        birthday: moment(e.birthday).format("DD-MM-YYYY"),
       };
     });
 

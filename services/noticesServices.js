@@ -19,9 +19,10 @@ class NoticesService {
     const notice = await Notices.create({ ...body, photoUrl });
     if (!notice) throw appError(400, "Error add notice");
 
-    const { _id: id, owner, ...result } = notice.toObject();
+   // const { _id: id, owner, ...result } = notice.toObject();
+    const { _id: id} = notice.toObject();
 
-    return { id, ...result };
+    return { id };
   };
 
   /**
@@ -56,6 +57,7 @@ class NoticesService {
         favorite: favorites.some((e) => e.equals(id)),
         age: birthday2age(birthday),
         owner: owner._id.toString() === userId,
+
       };
     });
 
@@ -226,6 +228,18 @@ class NoticesService {
 
     return { total: total.favorites.length, notice: result };
   };
+
+  unDelete = async () => {
+   // const notice = await Notices.find({ deleted: true }).select('_id');
+ 
+   const notice = await Notices.updateMany({deleted: true}, { $set: { deleted: false } })
+   
+    if (!notice) throw appError(404, "Error get notice");
+
+    const result =  notice ;
+    return result;
+  };
+
 }
 const noticesService = new NoticesService();
 

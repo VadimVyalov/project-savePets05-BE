@@ -58,6 +58,12 @@ class NoticesController {
 
     res.status(200).json(result);
   });
+
+  unDelete = catchAsync(async (req, res) => {
+ 
+    const result = await noticesService.unDelete();
+    res.status(200).json(result);
+  });
 }
 
 const noticesController = new NoticesController();

@@ -31,7 +31,7 @@ const REGEXP = {
     mes: "Field 'title' must contain minimum 2 characters, maximum 32, only unicode letter and digit ",
   },
   type: {
-    reg: /^[\p{Ll}'`\d]{1,15}$/u,
+    reg: /^[\p{L}'`\d]{1,15}$/u,
     mes: "Field 'type' must contain minimum 2 characters, maximum 16, only unicode letter",
   },
   location: {

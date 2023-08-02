@@ -10,8 +10,10 @@
       }
     },
   
-  
-  "servers": [{ "url": "https://project-savepets05-be.onrender.com" }],
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "https://project-savepets05-be.onrender.com" },
+              { "url": "http://localhost:5000" }],
     "tags": [
        {
         "name": "User",
@@ -269,77 +271,44 @@
       },
       "/api/notices": {
         "post": {
-          "tags": [
-            "Notice"
-          ],
+          "tags": ["Notice"],
           "summary": "Add notice",
+          "security": [{"BearerA": []}],
           "requestBody": {
             "content": {
               "multipart/form-data": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "title": {
-                      "type": "string",
-                      "example": "new notice1"
-                    },
-                    "category": {
-                      "type": "string",
-                      "example": "sell"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "Jac"
-                    },
-                    "birthday": {
-                      "type": "string",
-                      "example": "30-10-2020"
-                    },
-                    "type": {
-                      "type": "string",
-                      "example": "qwe"
-                    },
-                    "sex": {
-                      "type": "string",
-                      "example": "male"
-                    },
-                    "location": {
-                      "type": "string",
-                      "example": "Kharkiv"
-                    },
-                    "price": {
-                      "type": "integer",
-                      "example": "100"
-                    },
-                    "comments": {
-                      "type": "string",
-                      "example": "dfghjkl; kjhgfds"
-                    },
-                    "notice": {
-                      "type": "string",
-                      "format": "binary"
-                    }
+                  "$ref": "#/components/schemas/AddNoticeRequest"
                   }
                 }
               }
-            }
-          },
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ],
+            },
+          
+         
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Add new notice successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                   "type":"object",
+                   "properties":{
+                    "id": {
+                      "type": "string",
+                      "example": "64c8c233d5a106d9941393b7",
+                      "description": "MongoDB UUID"
+                    }
+                   }
+                  }
+                }
               }
-            }
+            },
+            "401": {"description": " Not authorized"},
+            "500": {"description": "Server error"}
           }
         }
       },
-      "/api/notices/categories": {
+      "/api/notices/category": {
         "get": {
           "tags": [
             "Notice"
@@ -417,19 +386,23 @@
           ],
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Get user info successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NoticeResponse"
+                  }
+                }
               }
-            }
+            },
+            "404": {"description": "Error get notice"},
+            "500": {"description": "Server error"}
           }
         }
       },
       "/api/notices/{id}": {
         "get": {
-          "tags": [
-            "Notice"
-          ],
+          "tags": ["Notice"],
           "summary": "Get notice by Id",
           "parameters": [
             {
@@ -440,11 +413,7 @@
               "description": "Get notice by id"
               }
           ],
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ],
+
           "responses": {
             "200": {
               "description": "Successful response",
@@ -455,9 +424,7 @@
           }
         },
         "delete": {
-          "tags": [
-            "Notice"
-          ],
+          "tags": ["Notice"],
           "summary": "Delete notice",
           "parameters": [
             {
@@ -468,10 +435,7 @@
               "description": "Delete notice by id"
               }
           ],
-          "security": [
-            {
-              "bearerAuth": []
-            }
+          "security": [{"BearerA": []}
           ],
           "responses": {
             "200": {
@@ -1008,8 +972,135 @@
                       "example": "+380667778899"
                     }
                   }
+         },
+         "AddNoticeRequest":{
+          "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "new notice",
+                      "required":true,
+                      "description": "Field 'title' must contain minimum 2 characters, maximum 32, only unicode letter and digit "
+                    },
+                    "category": {
+                      "type": "string",
+                      "example": "sell",
+                      "required":true,
+                      "description": "Field 'category' must contain one of ['sell', 'lost-found', 'for-free']"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Jack",
+                      "required":true,
+                      "description": "Field 'name' must contain minimum 2 characters, maximum 16, only unicode letter and first leter uppercase"
+
+                    },
+                    "birthday": {
+                      "type": "string",
+                      "example": "30-10-2020",
+                      "required":true,
+                      "description": "Field 'birthday' must contain data in format DD-MM-YYYY"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "buldog",
+                      "required":true,
+                      "description": "Field 'type' must contain minimum 2 characters, maximum 16, only unicode letter"
+                    },
+                    "sex": {
+                      "type": "string",
+                      "example": "male",
+                      "required":true,
+                      "description": "Field 'sex' must contain one of ['male', 'female']"
+                    },
+                    "location": {
+                      "type": "string",
+                      "example": "Kharkiv",
+                      "required":true,
+                      "description": "Field 'location' must contain minimum 2 characters, maximum 32, only unicode letter and first leter uppercase"
+                    },
+                    "price": {
+                      "type": "integer",
+                      "example": "100",
+                      "description": "Field 'price' number, required for category 'sale' "
+                    },
+                    "comments": {
+                      "type": "string",
+                      "example": "dfghjkl; kjhgfds",
+                      "description": "Field 'comments' must contain from 1 to 120 characters"
+                    },
+                    "notice": {
+                      "type": "string",
+                      "format": "binary",
+                      "description": "Image format file",
+                      "required": true
+                    }
          }
         },
+         "NoticeResponse": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "number",
+              "description": "total notice",
+              "example": "20"
+            },
+            "notice":{
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Notice id",
+                  "example": "64c084f3ddf5cee42947554a"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Notice title",
+                  "example": "Notice title"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Notice category",
+                  "example": "lost-found"
+                },
+                "sex":  {
+                  "type": "string",
+                  "description": "Pet sex",
+                  "example": "male"
+                },
+                "location":  {
+                  "type": "string",
+                  "description": "Pet location",
+                  "example": "Kharkiv"
+                },
+                "photoURL":  {
+                  "type": "string",
+                  "description": "Pet photo",
+                  "example": "v1690897723/notices/01_ye55wd.jpg"
+                },
+                "age":  {
+                  "type": "string",
+                  "description": "Pet age",
+                  "example": "3 month"
+                },                
+                "favorite":  {
+                  "type": "boolean",
+                  "description": "favorite",
+                  "example": "false"
+                },
+                "owner":  {
+                  "type": "boolean",
+                  "description": "owner",
+                  "example": "true"
+                }
+              }
+            }
+            }
+          }
+         }
+      },
       "securitySchemes": {
         "BearerA": {
           "type": "http",
