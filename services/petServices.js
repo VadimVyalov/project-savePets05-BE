@@ -82,7 +82,7 @@ class PetService {
       { deleted: true }
     );
 
-    if (!pet) throw appError(404, "Error get pet");
+    if (!pet) throw appError(400, "Error remove pet");
 
     const result = { id: petId, deleted: pet.deleted };
     return result;
