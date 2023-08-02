@@ -43,8 +43,11 @@ class Auth {
   
     if (!user ||  user?.token?.refresh !== token || !user?.token?.access)
       throw appError(401, "Not authorized");
+      req.user = { id }; 
       user.token.access = undefined;
       user.token.refresh = undefined;
+
+   console.log(id)   
     next();
 });
 

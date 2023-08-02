@@ -50,7 +50,7 @@ class NoticesService {
 
     const result = notice.map((e) => {
       const { _id: id, birthday, owner, ...result } = e.toObject();
-
+console.log(owner._id)
       return {
         id,
         ...result,
@@ -60,7 +60,7 @@ class NoticesService {
 
       };
     });
-
+console.log(userId)
     return { total: total.length, notice: result };
   };
 

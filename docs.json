@@ -711,10 +711,6 @@
                       "type": "string",
                       "example": "animal"
                     },
-                    "location": {
-                      "type": "string",
-                      "example": "Kharkiv"
-                    },
                     "comments": {
                       "type": "string",
                       "example": "Good pet"
@@ -984,9 +980,7 @@
           }
         },
         "CurrentResponse": {
-          "type": "object",
-          "properties": {
-            "user": {
+
               "type": "object",
               "properties": {
                 "name": {
@@ -1019,8 +1013,7 @@
                   "description": "User avatar",
                   "example": "v1690339589/avatars/m55p4t9joavvba8okhiy.jpg"
                 }
-              }
-            }
+     
            }
          },
          "InfoRequest":{
