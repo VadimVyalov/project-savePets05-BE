@@ -75,17 +75,22 @@ class NoticesService {
       .select("-createdAt -updatedAt ")
       .populate("owner", "_id email phone");
 
-    if (!result) throw appError(404, "Not found");
-
+    if (!result) throw appError(404, "Error get notice");
+    
+    const favorites = [];
+    const user = await User.findById(userId);
+    if (userId) if (!user) throw appError(404, "Error get user favorite");
+    if (user?.favorites?.length) favorites.push(...user.favorites);
+   
     const { _id: id, owner, ...notice } = result.toObject();
-
+//console.log(owner.favorites)
     return {
       id,
       ...notice,
       birthday: moment(notice.birthday).format("DD-MM-YYYY"),
       email: owner.email,
       phone: owner.phone,
-      favorite: owner.favorites?.some((e) => e.equals(id)),
+      favorite: favorites.some((e) => e.equals(id)),
       owner: owner._id.toString() === userId,
     };
   };
@@ -135,10 +140,10 @@ class NoticesService {
   remove = async (noticeId, userId) => {
     const notice = await Notices.findOneAndUpdate(
       { _id: noticeId, owner: userId, deleted: false },
-      { deleted: true }
+      { deleted: true },{ new: true }
     );
 
-    if (!notice) throw appError(404, "Error get notice");
+    if (!notice) throw appError(404, "Error remove notice");
 
     const result = { id: noticeId, deleted: notice.deleted };
     return result;

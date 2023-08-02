@@ -181,9 +181,7 @@
       },
       "/api/users/info": {
         "patch": {
-          "tags": [
-            "User"
-          ],
+          "tags": ["User"],
           "summary": "Info",
           "description": "Update user info ",          
           "security": [{"BearerA": []}],
@@ -310,15 +308,8 @@
       },
       "/api/notices/category": {
         "get": {
-          "tags": [
-            "Notice"
-          ],
+          "tags": ["Notice"],
           "summary": "List notices by category",
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ],
           "parameters": [
             {
               "name": "limit",
@@ -386,11 +377,11 @@
           ],
           "responses": {
             "200": {
-              "description": "Get user info successful",
+              "description": "Get notices successful",
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/NoticeResponse"
+                    "$ref": "#/components/schemas/NoticesResponse"
                   }
                 }
               }
@@ -403,7 +394,7 @@
       "/api/notices/{id}": {
         "get": {
           "tags": ["Notice"],
-          "summary": "Get notice by Id",
+          "summary": "Get full notice info by Id",
           "parameters": [
             {
               "in": "path",
@@ -416,11 +407,17 @@
 
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Get notice info successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NoticeResponse"
+                  }
+                }
               }
-            }
+            },
+            "404": {"description": "Error get notice"},
+            "500": {"description": "Server error"}
           }
         },
         "delete": {
@@ -439,21 +436,39 @@
           ],
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Remove notice successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties":{
+                    "id": {
+                      "type": "string",
+                      "description": "notice id",
+                      "example": "64c932b8996e6c3d7a692b69"
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "notice deleted status",
+                      "example": "true"
+                    }
+                  }
+                  }
+                }
               }
-            }
+            },
+            
+            "401": {"description": "Not authorized"},
+            "404": {"description": "Error remove notice"},
+            "500": {"description": "Server error"}
           }
         }
       },
       "/api/notices/myads": {
         "get": {
-          "tags": [
-            "Notice"
-          ],
+          "tags": ["Notice"],
           "summary": "List my notice",
-          "security": [{"bearerAuth": []}],
+          "security": [{"BearerA": []}],
           "parameters": [
             {
               "name": "limit",
@@ -521,11 +536,18 @@
           ],
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Get current user notices successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NoticesResponse"
+                  }
+                }
               }
-            }
+            },
+            "401": {"description": "Not authorized"},
+            "404": {"description": "Error get notice"},
+            "500": {"description": "Server error"}
           }
         }
       },
@@ -533,7 +555,7 @@
         "get": {
           "tags": ["Notice"],
           "summary": "List favorite notice",
-          "security": [{"bearerAuth": []}],
+          "security": [{"BearerA": []}],
           "parameters": [
             {
               "name": "limit",
@@ -601,11 +623,18 @@
           ],
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Get favorited notices successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NoticesResponse"
+                  }
+                }
               }
-            }
+            },
+            "401": {"description": "Not authorized"},
+            "404": {"description": "Error get notice"},
+            "500": {"description": "Server error"}
           }
         }
       },
@@ -613,38 +642,56 @@
         "patch": {
           "tags": ["Notice"],
           "summary": "Follow notice",
+          "security": [{"BearerA": []}],
           "parameters": [
             {
               "in": "path",
               "name": "id",
               "required": true,
               "type": "string",
-              "description": "Get notice by id"
+              "description": " Notice id (MongoDB UUID)",
+              "example":"64c932b8996e6c3d7a692b69"
               }
           ],
           "requestBody": {
             "content": {}
           },
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ],
+
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Remove notice successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties":{
+                    "id": {
+                      "type": "string",
+                      "description": "notice id",
+                      "example": "64c932b8996e6c3d7a692b69"
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "notice deleted status",
+                      "example": "true"
+                    }
+                  }
+                  }
+                }
               }
-            }
+            },
+            
+            "401": {"description": "Not authorized"},
+
+            "404": { "description": "Error follow user notice" },
+            "500": {"description": "Server error"}
           }
         }
       },
       "/api/pet": {
         "post": {
-          "tags": [
-            "Pet"
-          ],
+          "tags": ["Pet"],
+          "security": [{"BearerA": []}],
           "summary": "Add pet",
           "requestBody": {
             "content": {
@@ -654,7 +701,7 @@
                   "properties": {
                     "name": {
                       "type": "string",
-                      "example": "Jac"
+                      "example": "Fixik"
                     },
                     "birthday": {
                       "type": "string",
@@ -662,11 +709,7 @@
                     },
                     "type": {
                       "type": "string",
-                      "example": "qwe"
-                    },
-                    "sex": {
-                      "type": "string",
-                      "example": "male"
+                      "example": "animal"
                     },
                     "location": {
                       "type": "string",
@@ -674,33 +717,40 @@
                     },
                     "comments": {
                       "type": "string",
-                      "example": "dfghjkl; kjhgfds"
+                      "example": "Good pet"
                     },
                     "pet": {
                       "type": "string",
                       "format": "binary"
-                    },
-                    "title": {
-                      "type": "integer",
-                      "example": "1111"
-                    },
-                    "rrrrr": {
-                      "type": "string",
-                      "example": "rrrr"
                     }
+
                   }
                 }
               }
             }
           },
-          "security": [{"BearerA": []}],
+          
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Add pet successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties":{
+                    "id": {
+                      "type": "string",
+                      "description": "notice id",
+                      "example": "64c932b8996e6c3d7a692b69"
+                    }
+                  }
+                  }
+                }
               }
-            }
+            },
+            "400": { "description": "Error add pet"},
+            "401": {"description": "Not authorized"},
+            "500": {"description": "Server error"}
           }
         },
         "get": {
@@ -729,11 +779,18 @@
           ],
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Get current user info with your pet successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PetsResponse"
+                  }
+                }
               }
-            }
+            },
+            "401": {"description": "Not authorized"},
+            "404": {"description": "Error get user info"},
+            "500": {"description": "Server error"}
           }
         }
       },
@@ -753,11 +810,30 @@
           "security": [{"BearerA": []}],
           "responses": {
             "200": {
-              "description": "Successful response",
+              "description": "Remove pet successful",
               "content": {
-                "application/json": {}
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties":{
+                    "id": {
+                      "type": "string",
+                      "description": "notice id",
+                      "example": "64c932b8996e6c3d7a692b69"
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "notice deleted status",
+                      "example": "true"
+                    }
+                  }
+                  }
+                }
               }
-            }
+            },
+            "400": { "description": "Error remove pet" },
+            "401": {"description": "Not authorized"},
+            "500": {"description": "Server error"}
           }
         }
       }
@@ -774,7 +850,6 @@
           }
         }
         },
-        
         "RegistrationRequest": {
           "type": "object",
           "required": [
@@ -1037,7 +1112,7 @@
                     }
          }
         },
-         "NoticeResponse": {
+         "NoticesResponse": {
           "type": "object",
           "properties": {
             "total": {
@@ -1095,6 +1170,177 @@
                   "description": "owner",
                   "example": "true"
                 }
+              }
+            }
+            }
+          }
+         },
+         "NoticeResponse": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Notice id",
+                  "example": "64c084f3ddf5cee42947554a"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Notice title",
+                  "example": "Notice title"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Notice category",
+                  "example": "lost-found"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Pet name",
+                  "example": "Jack"
+                },
+                "birthday": {
+                  "type": "string",
+                  "description": "Pet birthday 'DD-MM-YYY'",
+                  "example": "30-10-2020"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Pet type",
+                  "example": "buldog"
+                },
+                "sex":  {
+                  "type": "string",
+                  "description": "Pet sex",
+                  "example": "male"
+                },
+                "location":  {
+                  "type": "string",
+                  "description": "Pet location",
+                  "example": "Kharkiv"
+                },
+                "photoURL":  {
+                  "type": "string",
+                  "description": "Pet photo",
+                  "example": "v1690897723/notices/01_ye55wd.jpg"
+                },
+                "price": {
+                  "type": "number",
+                  "description": "Pet price (for sell category)",
+                  "example": 100
+                },
+                "comments": {
+                  "type": "string",
+                  "description": "Notice comments",
+                  "example": "Good dog"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User email",
+                  "example": "test01@mail.com"
+                },
+
+                "phone":  {
+                  "type": "string",
+                  "description": "User phone",
+                  "example": "+380667778899"
+                },
+                "favorite":  {
+                  "type": "boolean",
+                  "description": "favorite",
+                  "example": "false"
+                },
+                "owner":  {
+                  "type": "boolean",
+                  "description": "owner",
+                  "example": "true"
+                },
+                "delete":  {
+                  "type": "boolean",
+                  "description": "deleted notice",
+                  "example": "false"
+                }
+          }
+         },
+         "PetsResponse": {
+          "type": "object",
+          "properties": {
+            "user":{
+            
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "User name",
+                        "example": "Test01"
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "User email",
+                        "example": "test01@mail.com"
+                      },
+                      "birthday": {
+                        "type": "string",
+                        "description": "User birthday",
+                        "example": "30-10-1980"
+                      },
+                      "phone":  {
+                        "type": "string",
+                        "description": "User phone",
+                        "example": "+380667778899"
+                      },
+                      "city":  {
+                        "type": "string",
+                        "description": "User city",
+                        "example": "Kharkiv"
+                      },
+                      "avatarURL":  {
+                        "type": "string",
+                        "description": "User avatar",
+                        "example": "v1690339589/avatars/m55p4t9joavvba8okhiy.jpg"
+                      }
+            }
+          },
+            "total": {
+              "type": "number",
+              "description": "total pets",
+              "example": "2"
+            },
+            "pet":{
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Notice id",
+                  "example": "64c084f3ddf5cee42947554a"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Pet name",
+                  "example": "Jack"
+                },
+                "birthday": {
+                  "type": "string",
+                  "description": "Pet birthday",
+                  "example": "30-10-2020"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Pet type",
+                  "example": "buldog"
+                },
+                "comments": {
+                  "type": "string",
+                  "description": "Comments about pet",
+                  "example": "Bad dog"
+                },
+                "photoURL":  {
+                  "type": "string",
+                  "description": "Pet photo",
+                  "example": "v1690897723/notices/01_ye55wd.jpg"
+                }
+                 
               }
             }
             }
