@@ -45,10 +45,10 @@ class UserValidationSchema {
     birthday: Joi.string().pattern(REGEXP.birthday.reg).required().messages({
       "string.pattern.base": REGEXP.birthday.mes,
     }),
-    phone: Joi.string().pattern(REGEXP.phone.reg).messages({
+    phone: Joi.string().pattern(REGEXP.phone.reg).allow(null, "").messages({
       "string.pattern.base": REGEXP.phone.mes,
     }),
-    city: Joi.string().pattern(REGEXP.city.reg).messages({
+    city: Joi.string().pattern(REGEXP.city.reg).allow(null, "").messages({
       "string.pattern.base": REGEXP.city.mes,
     }),
     avatarURL: Joi.string().allow(null, ""),

@@ -96,11 +96,9 @@ class PetService {
    */
 
   update = async (id, body) => {
-    try {
+
       return await Pet.findByIdAndUpdate(id, body, { new: true });
-    } catch (error) {
-      console.log(error);
-    }
+
   };
   //TODO <<<<<<<<<<<<<<<<<<
 }
