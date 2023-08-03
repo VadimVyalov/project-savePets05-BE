@@ -15,7 +15,7 @@ Project is built using the following tools:
 
 ## Installation
 
-To install Goose Track, follow these steps:
+To install project, follow these steps:
 
 1. Clone the repository to your server
 2. Install dependencies using npm install.
