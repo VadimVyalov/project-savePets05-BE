@@ -1,33 +1,36 @@
 const { Schema, model } = require("mongoose");
 const { mongooseError } = require("../utils");
-const { CATEGORY, SEX } = require("../config");
+const { CATEGORY, SEX, REGEXP } = require("../config");
 const notice = new Schema(
   {
     category: {
       type: String,
+      required: [true, "Category is required"],
       enum: CATEGORY,
       default: CATEGORY[0],
     },
-
     title: {
       type: String,
       required: [true, "Title is required"],
+      match:[REGEXP.title.reg,REGEXP.title.mes],
     },
     name: {
       type: String,
-      default: null,
+      required: [true, "Name is required"],
+      match:[REGEXP.name.reg,REGEXP.name.mes],
     },
     birthday: {
       type: Date,
-      default: null,
+      required: [true, "Birthday is required"],
     },
-
     type: {
       type: String,
-      default: null,
+      required: [true, "Type is required"],
+      match:[REGEXP.type.reg,REGEXP.type.mes],
     },
     sex: {
       type: String,
+      required: [true, "Sex is required"],
       enum: SEX,
       default: SEX[0],
     },
@@ -37,9 +40,9 @@ const notice = new Schema(
     },
     location: {
       type: String,
-      default: null,
+      required: [true, "Location is required"],
+      match:[REGEXP.location.reg,REGEXP.location.mes],
     },
-
     price: {
       type: Number,
       min: 1,
@@ -48,9 +51,9 @@ const notice = new Schema(
     },
     comments: {
       type: String,
+      maxLength:120,
       default: null,
     },
-
     deleted: {
       type: Boolean,
       default: false,

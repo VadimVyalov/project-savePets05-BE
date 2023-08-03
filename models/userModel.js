@@ -1,10 +1,9 @@
 const { Schema, model } = require("mongoose");
 const { mongooseError } = require("../utils");
-
+const {  REGEXP,DEFAULT_USER_IMGURL } = require("../config");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-//  const gravatar = require("gravatar");
-//  const { v4 } = require("uuid");
+const { v4 } = require("uuid");
 
 const user = new Schema(
   {
@@ -19,7 +18,8 @@ const user = new Schema(
     },
     name: {
       type: String,
-      default: null,
+      required: [true, "Name is required"],
+      match:[REGEXP.name.reg,REGEXP.name.mes],
     },
     birthday: {
       type: Date,
@@ -27,10 +27,12 @@ const user = new Schema(
     },
     phone: {
       type: String,
+      match:[REGEXP.phone.reg,REGEXP.phone.mes],
       default: null,
     },
     city: {
       type: String,
+      match:[REGEXP.city.reg,REGEXP.city.mes],
       default: null,
     },
     avatarURL: {
@@ -77,17 +79,12 @@ user.methods.getToken = function (secret, exp) {
 user.post("save", mongooseError);
 
 user.pre("save", async function (next) {
-  // if (this.isNew) {
-  //   const avatarURL = gravatar.url(this.email, {
-  //     s: "250",
-  //     r: "g",
-  //     d: "wavatar",
-  //   });
-  //   this.avatarURL = avatarURL;
-  //   this.verificationToken = v4();
+  if (this.isNew) {
+    
+    this.avatarURL = DEFAULT_USER_IMGURL;
+    this.verificationToken = v4();
 
-  //   // console.log(this.birthday);
-  // }
+  }
 
   if (!this.isModified("password")) return next();
 

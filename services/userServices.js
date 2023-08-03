@@ -1,6 +1,5 @@
 const User = require("../models/userModel");
 const { appError } = require("../utils");
-// const ImageService = require("./ImageService");
 const CloudinaryService = require("./cloudinaryServices");
 const moment = require("moment");
 class UserServuces {
@@ -22,7 +21,6 @@ class UserServuces {
     if (!token.refresh) throw appError(400, "Refresh token denied");
 
     const { name, email, id } = user;
-    //console.log(token);
     await User.findByIdAndUpdate(id, {
       token,
     });
@@ -35,7 +33,7 @@ class UserServuces {
       },
     };
     return result;
-    // return { user: { email, name } };
+
   };
 
   login = async (body) => {
@@ -43,7 +41,7 @@ class UserServuces {
     const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } = process.env;
     const { email, password } = body;
     const token = {};
-    // console.log(moment("01-02-2000", "DD-MM-YYYY"));
+
     const user = await User.findOne({ email });
     if (!user) throw appError(401, "Email or password is wrong");
 

@@ -22,8 +22,6 @@ class ValidatePet {
         `missing field${bodyNoKey.length > 1 ? "s" : ""}: ${bodyNoKey}`
       );
 
-    //   const bodyKey = PET_BODY.filter((fild) => bodyData.includes(fild));
-    //  console.log(bodyKey)
     const { error } = petValidationSchema.add.validate(req.body);
     if (error) throw appError(400, error.message);
 

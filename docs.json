@@ -12,8 +12,8 @@
   
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://project-savepets05-be.onrender.com" },
-              { "url": "http://localhost:5000" }],
+  "servers": [{ "url": "https://project-savepets05-be.onrender.com/api" },
+              { "url": "http://localhost:5000/api" }],
     "tags": [
        {
         "name": "User",
@@ -30,7 +30,7 @@
     ],
   
     "paths": {
-      "/api/users/register": {
+      "/users/register": {
         "post": {
           "tags": ["User"],
           "summary": "Register",
@@ -66,7 +66,7 @@
           }
         }
       },
-      "/api/users/login": {
+      "/users/login": {
         "post": {
           "tags": [
             "User"
@@ -112,7 +112,7 @@
           }
         }
       },
-      "/api/users/refresh": {
+      "/users/refresh": {
         "post": {
           "tags": [
             "User"
@@ -142,7 +142,7 @@
 
         }
       },
-      "/api/users/logout": {
+      "/users/logout": {
         "post": {
           "tags": [
             "User"
@@ -157,7 +157,7 @@
           }
           }
       },
-      "/api/users/current": {
+      "/users/current": {
         "get": {
           "tags": [ "User" ],
           "summary": "Current",
@@ -179,7 +179,7 @@
           }
         }
       },
-      "/api/users/info": {
+      "/users/info": {
         "patch": {
           "tags": ["User"],
           "summary": "Info",
@@ -223,7 +223,7 @@
           }
         }
       },
-      "/api/users/avatars": {
+      "/users/avatars": {
         "patch": {
           "tags": ["User"],
           "summary": "Avatar",
@@ -267,7 +267,7 @@
           }
         }
       },
-      "/api/notices": {
+      "/notices": {
         "post": {
           "tags": ["Notice"],
           "summary": "Add notice",
@@ -306,7 +306,7 @@
           }
         }
       },
-      "/api/notices/category": {
+      "/notices/category": {
         "get": {
           "tags": ["Notice"],
           "summary": "List notices by category",
@@ -391,7 +391,7 @@
           }
         }
       },
-      "/api/notices/{id}": {
+      "/notices/{id}": {
         "get": {
           "tags": ["Notice"],
           "summary": "Get full notice info by Id",
@@ -464,7 +464,7 @@
           }
         }
       },
-      "/api/notices/myads": {
+      "/notices/myads": {
         "get": {
           "tags": ["Notice"],
           "summary": "List my notice",
@@ -551,7 +551,7 @@
           }
         }
       },
-      "/api/notices/favorite": {
+      "/notices/favorite": {
         "get": {
           "tags": ["Notice"],
           "summary": "List favorite notice",
@@ -638,7 +638,7 @@
           }
         }
       },
-      "/api/notices/favorite/{id}": {
+      "/notices/favorite/{id}": {
         "patch": {
           "tags": ["Notice"],
           "summary": "Follow notice",
@@ -688,7 +688,7 @@
           }
         }
       },
-      "/api/pet": {
+      "/pet": {
         "post": {
           "tags": ["Pet"],
           "security": [{"BearerA": []}],
@@ -790,7 +790,7 @@
           }
         }
       },
-      "/api/pet/{id}": {
+      "/pet/{id}": {
         "delete": {
           "tags": ["Pet"],
           "summary": "Delete pet",
@@ -855,17 +855,17 @@
           "properties": {
             "name": {
               "type": "string",
-              "description": "User's name",
+              "description": "User name",
               "example": "User"
             },
             "email": {
               "type": "string",
-              "description": "User's email",
+              "description": "User email",
               "example": "user@mail.com"
             },
             "password": {
               "type": "string",
-              "description": "User's password",
+              "description": "User password",
               "example": "A123456a"
             }
           }
