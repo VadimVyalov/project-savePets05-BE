@@ -5,13 +5,7 @@ class UserController {
   registration = catchAsync(async (req, res) => {
     const result = await userService.registration(req.body);
 
-    // const { user, verificationToken } = result;
-
-    //await sendEmail(user.email, verificationToken);
-
     req.body = undefined;
-
-    //res.status(201).json({ user });
     res.status(201).json(result);
   });
 
@@ -62,7 +56,16 @@ class UserController {
       avatarURL,
     });
   });
+  registrationVerify = catchAsync(async (req, res) => {
+    const result = await userService.registration(req.body);
 
+    const { user, verificationToken } = result;
+   await sendEmail(user.email, verificationToken);
+
+    req.body = undefined;
+    res.status(201).json(result);
+  });
+  
   sendVerify = catchAsync(async (req, res) => {
     const { email } = req.body;
 

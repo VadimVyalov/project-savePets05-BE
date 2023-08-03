@@ -17,12 +17,10 @@ const REGEXP = {
     mes: "Field 'birthday' has invalid date format. The format should be DD-MM-YYYY.",
   },
   name: {
-    // reg: /^[^`][^\d_!¡?÷?¿+=@#$%ˆ&*(){.,}| ~<>;:\^\[\]\-\/\\]{1,14}$/,
     reg: /^[\p{Lu}]{1}[\p{Ll}'`\d]{1,15}$/u,
     mes: "Field 'name' must contain minimum 2 characters, maximum 16, only unicode letter and first leter uppercase",
   },
   city: {
-    // reg: /^[^`][^\d_!¡?÷?¿+=@#$%ˆ&*(){.,}| ~<>;:\^\[\]\-\/\\]{1,14}$/,
     reg: /^[\p{Lu}]{1}[\p{Ll}'`]{1,31}$/u,
     mes: "Field 'city' must contain minimum 2 characters, maximum 32, only unicode letter and first leter uppercase",
   },
@@ -55,4 +53,7 @@ const PET_BODY = ["name", "birthday", "type"];
 const CATEGORY = ["sell", "lost-found", "for-free"];
 const SEX = ["male", "female"];
 
-module.exports = { TOKEN, REGEXP, NOTISE_BODY, PET_BODY, CATEGORY, SEX };
+const BASE_IMGURL = "https://res.cloudinary.com/dfvviqdic/image/upload/";
+const DEFAULT_USER_IMGURL = "v1690339589/avatars/m55p4t9joavvba8okhiy.jpg";
+
+module.exports = { TOKEN, REGEXP, NOTISE_BODY, PET_BODY, CATEGORY, SEX ,BASE_IMGURL,DEFAULT_USER_IMGURL};

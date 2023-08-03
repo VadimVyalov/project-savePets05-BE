@@ -12,8 +12,8 @@ router.post(
 router.post("/login", userValidate.login, userController.login);
 router.post("/refresh", authUser.refresh, userController.refresh);
 
-// router.post("/verify", validateVerify, userController.sendVerify);
-// router.get("/verify/:verificationToken", userController.verifyEmail);
+ router.post("/verify", userValidate.validateVerify, userController.sendVerify);
+ router.get("/verify/:verificationToken", userController.verifyEmail);
 
 router.use("/", authUser.access);
 router.get("/current", userController.current);

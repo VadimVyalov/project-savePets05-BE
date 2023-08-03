@@ -36,7 +36,7 @@ class NoticeValidationSchema {
         is: Joi.string().valid(CATEGORY[0]),
         then: Joi.required(),
       }),
-    comments: Joi.string().allow(null, "").min(1).max(120),
+    comments: Joi.string().allow(null, "").max(120),
   });
 
   verify = Joi.object({

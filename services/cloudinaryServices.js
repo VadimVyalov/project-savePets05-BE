@@ -39,9 +39,9 @@ class CloudinaryService {
 
   static async save(file, options, ...folder) {
     const data = await sharp(file.buffer)
-      // .resize(options || { height: 500, width: 500 })
+      .resize( { height: 400, fit:"cover", position:'centre' })
       .toFormat("jpeg")
-      .jpeg({ quality: 100 })
+      .jpeg({ quality: 80 })
       .toBuffer();
 
     const cloudinaryOptions = {
@@ -60,12 +60,10 @@ class CloudinaryService {
         dataURI,
         cloudinaryOptions
       );
-      //  console.log(cloudinaryResponse);
+    
       const { public_id, version, format } = cloudinaryResponse;
-      //  const baseImgUrl = "https://res.cloudinary.com/dfvviqdic/image/upload/";
-      const imgUrl = `v${version}/${public_id}.${format}`;
-      //  const fullImgUrl = baseImgUrl + imgUrl;
-      //  console.log(fullImgUrl);
+         const imgUrl = `v${version}/${public_id}.${format}`;
+ 
       return imgUrl;
     } catch (err) {
       throw appError(400, "Cloudinary bad response ...");

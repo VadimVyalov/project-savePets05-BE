@@ -1,23 +1,25 @@
 const { Schema, model } = require("mongoose");
 const { mongooseError } = require("../utils");
-const { SEX } = require("../config");
+const { SEX,REGEXP } = require("../config");
 const pet = new Schema(
   {
     name: {
       type: String,
-      default: null,
+      required: [true, "Name is required"],
+      match:[REGEXP.name.reg,REGEXP.name.mes],
     },
     birthday: {
       type: Date,
-      default: null,
+      required: [true, "Birthday is required"],
     },
-
     type: {
       type: String,
-      default: null,
+      required: [true, "Type is required"],
+      match:[REGEXP.type.reg,REGEXP.type.mes],
     },
     sex: {
       type: String,
+     // required: [true, "Sex is required"],
       enum: SEX,
       default: SEX[0],
     },
@@ -28,6 +30,7 @@ const pet = new Schema(
 
     comments: {
       type: String,
+      maxLength:120,
       default: null,
     },
     owner: {
